@@ -28,9 +28,13 @@ services:
     container_name: "mongo_${PROJECT_NAME}"
     ports:
       - "27017:27017"
+    command: --bind_ip_all
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+      - mongo-data:/data/db
     networks:
       - app_network
 
@@ -45,6 +49,7 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER_WAIT: 60
     depends_on:
       - mongo
     networks:
@@ -53,3 +58,6 @@ services:
 networks:
   app_network:
     name: "network_${PROJECT_NAME}"
+
+volumes:
+  mongo-data:
