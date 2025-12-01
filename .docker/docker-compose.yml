@@ -1,0 +1,28 @@
+services:
+  server_docker:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+      args:
+        BASE_IMAGE: ${BASE_IMAGE}
+        BASE_IMAGE_VERSION: ${BASE_IMAGE_VERSION}
+        BASE_IMAGE_VARIANT: ${BASE_IMAGE_VARIANT}
+        NEW_UID: ${NEW_UID}
+        NEW_GID: ${NEW_GID}
+        MY_USER: ${MY_USER}
+        MY_GROUP: ${MY_GROUP}
+    pull_policy: never
+    container_name: "server_docker_${PROJECT_NAME}"
+    user: node
+    ports:
+      - "${APP_PORT}:5173"
+    volumes:
+      - ../.:/var/www/html
+    tty: true
+    stdin_open: true
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    name: "network_${PROJECT_NAME}"

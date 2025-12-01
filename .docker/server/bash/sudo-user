@@ -1,0 +1,14 @@
+## ---------------------------------------------------------
+## Mantener PATH en comandos sudo
+## ---------------------------------------------------------
+Defaults   env_keep += "PATH"
+
+## ---------------------------------------------------------
+## Configurar PATH seguro para sudo
+## ---------------------------------------------------------
+Defaults   secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/local/node/bin
+
+## ---------------------------------------------------------
+## Permitir a pablogarciajc usar sudo sin contraseña
+## ---------------------------------------------------------
+%pablogarciajc  ALL=(ALL)       NOPASSWD: ALL
