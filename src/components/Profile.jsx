@@ -1,30 +1,47 @@
 
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import '../index.css';
 
-const user = {
-  name: 'Pablo García',
-  avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-  bio: 'Desarrollador web y entusiasta de la tecnología. Me encanta crear cosas nuevas y compartir ideas.',
-  friends: 120,
-  posts: 34
-};
+const Profile = () => {
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-const Profile = () => (
-  <div className="profile">
-    <h2 className="profile__title">Perfil</h2>
-    <div className="profile__card">
-      <img src={user.avatar} alt={user.name} className="profile__avatar" />
-      <div className="profile__info">
-        <div className="profile__name">{user.name}</div>
-        <div className="profile__bio">{user.bio}</div>
-        <div className="profile__stats">
-          <span>Amigos: <span>{user.friends}</span></span>
-          <span>Publicaciones: <span>{user.posts}</span></span>
+  useEffect(() => {
+    fetch('http://localhost:3000/api/profile')
+      .then(res => res.json())
+      .then(data => {
+        // Puedes elegir el primer perfil o filtrar por usuario
+        setProfile(data[0]);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  return (
+    <div className="profile">
+      <h2 className="profile__title">Perfil</h2>
+      {loading ? (
+        <div>Cargando perfil...</div>
+      ) : profile ? (
+        <div className="profile__card">
+          <img src={profile.avatar} alt={profile.usuario} className="profile__avatar" />
+          <div className="profile__info">
+            <div className="profile__name">{profile.usuario}</div>
+            <div className="profile__bio">{profile.bio}</div>
+            <div className="profile__stats">
+              {/* Puedes agregar amigos y posts si tienes esos datos */}
+              {profile.intereses && (
+                <span>Intereses: <span>{profile.intereses.join(', ')}</span></span>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div>No se encontró perfil.</div>
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 export default Profile;

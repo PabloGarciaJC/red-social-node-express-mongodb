@@ -32,13 +32,11 @@ async function connectDB() {
   }
 }
 
-
 app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('¡Express está funcionando!');
 });
-
 
 app.get('/api/publicaciones', async (req, res) => {
   try {
@@ -50,7 +48,6 @@ app.get('/api/publicaciones', async (req, res) => {
   }
 });
 
-// Endpoint para obtener amigos (friends)
 app.get('/api/friends', async (req, res) => {
   try {
     const friends = await db.collection('amigos').find({}).toArray();
@@ -61,9 +58,37 @@ app.get('/api/friends', async (req, res) => {
   }
 });
 
-// Primero conectar a MongoDB
+app.get('/api/messages', async (req, res) => {
+  try {
+    const messages = await db.collection('mensajes').find({}).toArray();
+    res.json(messages);
+  } catch (err) {
+    console.error("Error en /api/messages:", err);
+    res.status(500).json({ error: "Error al obtener mensajes" });
+  }
+});
+
+app.get('/api/notifications', async (req, res) => {
+  try {
+    const notifications = await db.collection('notificaciones').find({}).toArray();
+    res.json(notifications);
+  } catch (err) {
+    console.error("Error en /api/notifications:", err);
+    res.status(500).json({ error: "Error al obtener notificaciones" });
+  }
+});
+
+app.get('/api/profile', async (req, res) => {
+  try {
+    const profiles = await db.collection('perfiles').find({}).toArray();
+    res.json(profiles);
+  } catch (err) {
+    console.error("Error en /api/profile:", err);
+    res.status(500).json({ error: "Error al obtener perfil" });
+  }
+});
+
 connectDB().then(() => {
-  // Luego arrancar el servidor
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor escuchando en http://0.0.0.0:${PORT}`);
   });
