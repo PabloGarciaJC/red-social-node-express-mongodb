@@ -1,10 +1,16 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const MONGO_URL = 'mongodb://mongo:27017';
-const DB_NAME = 'redsocialdb';
+const MONGO_USER = process.env.MONGO_USER;
+const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
+const MONGO_HOST = process.env.MONGO_HOST;
+const MONGO_PORT = process.env.MONGO_PORT;
+const DB_NAME = process.env.MONGO_DB;
+
+const MONGO_URL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${DB_NAME}`;
 
 let db;
 
