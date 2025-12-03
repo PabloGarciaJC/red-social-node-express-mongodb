@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
   res.send('¡Express está funcionando!');
 });
 
+
 app.get('/api/publicaciones', async (req, res) => {
   try {
     const publicaciones = await db.collection('publicaciones').find({}).toArray();
@@ -46,6 +47,17 @@ app.get('/api/publicaciones', async (req, res) => {
   } catch (err) {
     console.error("Error en /api/publicaciones:", err);
     res.status(500).json({ error: "Error al obtener publicaciones" });
+  }
+});
+
+// Endpoint para obtener amigos (friends)
+app.get('/api/friends', async (req, res) => {
+  try {
+    const friends = await db.collection('amigos').find({}).toArray();
+    res.json(friends);
+  } catch (err) {
+    console.error("Error en /api/friends:", err);
+    res.status(500).json({ error: "Error al obtener amigos" });
   }
 });
 
