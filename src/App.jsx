@@ -7,6 +7,8 @@ import Messages from "./components/Messages";
 import Friends from "./components/Friends";
 import Notifications from "./components/Notifications";
 import Navbar from "./components/Navbar";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -18,11 +20,13 @@ export default function App() {
       <Navbar />
       <main className="main flex-1 p-6">
         <Routes>
-          <Route path="/" element={<Feed />} />
+          <Route path="/" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/friends" element={<Friends />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </main>
     </div>

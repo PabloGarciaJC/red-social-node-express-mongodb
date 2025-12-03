@@ -1,3 +1,92 @@
+/* ====== LOGIN & REGISTER ====== */
+.login, .register {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(24,119,242,0.08);
+  border: 1px solid #e3e6ea;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login__title, .register__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1877f2;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.login__form, .register__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.login__form input, .register__form input {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #e3e6ea;
+  font-size: 1rem;
+  background: #f7faff;
+  transition: border 0.2s;
+}
+.login__form input:focus, .register__form input:focus {
+  border: 1.5px solid #1877f2;
+  outline: none;
+}
+.login__form button, .register__form button {
+  padding: 12px 0;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #1877f2 80%, #1456b8 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.login__form button:disabled, .register__form button:disabled {
+  background: #b3cdfa;
+  cursor: not-allowed;
+}
+.login__error, .register__error {
+  color: #e53935;
+  background: #ffeaea;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-top: -10px;
+  font-size: 0.98rem;
+  text-align: center;
+}
+.register__success {
+  color: #22c55e;
+  background: #eaffea;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-top: -10px;
+  font-size: 0.98rem;
+  text-align: center;
+}
+.login__register-link, .register__back-link {
+  margin-top: 18px;
+  text-align: center;
+}
+.login__register-link button, .register__back-link button {
+  background: none;
+  color: #1877f2;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.login__register-link button:hover, .register__back-link button:hover {
+  color: #1456b8;
+}
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 body {

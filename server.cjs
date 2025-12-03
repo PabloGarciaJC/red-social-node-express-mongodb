@@ -32,11 +32,13 @@ async function connectDB() {
   }
 }
 
+
 app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('¡Express está funcionando!');
 });
+
 
 app.get('/api/publicaciones', async (req, res) => {
   try {
@@ -47,6 +49,7 @@ app.get('/api/publicaciones', async (req, res) => {
     res.status(500).json({ error: "Error al obtener publicaciones" });
   }
 });
+
 
 app.get('/api/friends', async (req, res) => {
   try {
@@ -85,6 +88,60 @@ app.get('/api/profile', async (req, res) => {
   } catch (err) {
     console.error("Error en /api/profile:", err);
     res.status(500).json({ error: "Error al obtener perfil" });
+  }
+});
+
+
+// Endpoint de registro
+app.post('/api/register', async (req, res) => {
+  try {
+    const { nombre, email, password, avatar } = req.body;
+    if (!nombre || !email || !password) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios.' });
+    }
+    // Verificar si el email ya existe
+    const existe = await db.collection('usuarios').findOne({ email });
+    if (existe) {
+      return res.status(409).json({ error: 'El email ya está registrado.' });
+    }
+    // Encriptar contraseña
+    const hash = await bcrypt.hash(password, 10);
+    const nuevoUsuario = {
+      nombre,
+      email,
+      password: hash,
+      avatar: avatar || '',
+      fechaRegistro: new Date()
+    };
+    await db.collection('usuarios').insertOne(nuevoUsuario);
+    res.status(201).json({ mensaje: 'Usuario registrado correctamente.' });
+  } catch (err) {
+    console.error('Error en /api/register:', err);
+    res.status(500).json({ error: 'Error al registrar usuario.' });
+  }
+});
+
+// Endpoint de login
+app.post('/api/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios.' });
+    }
+    const usuario = await db.collection('usuarios').findOne({ email });
+    if (!usuario) {
+      return res.status(401).json({ error: 'Credenciales incorrectas.' });
+    }
+    const valido = await bcrypt.compare(password, usuario.password);
+    if (!valido) {
+      return res.status(401).json({ error: 'Credenciales incorrectas.' });
+    }
+    // Generar token JWT
+    const token = jwt.sign({ id: usuario._id, email: usuario.email }, 'secreto', { expiresIn: '2h' });
+    res.json({ token, usuario: { nombre: usuario.nombre, email: usuario.email, avatar: usuario.avatar } });
+  } catch (err) {
+    console.error('Error en /api/login:', err);
+    res.status(500).json({ error: 'Error al iniciar sesión.' });
   }
 });
 
