@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../index.css';
 import Register from './Register';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [showRegister, setShowRegister] = useState(false);
@@ -8,6 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,8 +24,8 @@ const Login = () => {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem('token', data.token);
-        // Aquí podrías redirigir o actualizar el estado global
-        alert('¡Login exitoso!');
+        // Redirigir al Feed tras login exitoso
+        navigate('/feed');
       } else {
         setError(data.error || 'Error al iniciar sesión');
       }

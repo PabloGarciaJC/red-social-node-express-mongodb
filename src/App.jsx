@@ -21,6 +21,7 @@ export default function App() {
       <main className="main flex-1 p-6">
         <Routes>
           <Route path="/" element={<Register />} />
+          <Route path="/feed" element={<Feed />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/friends" element={<Friends />} />

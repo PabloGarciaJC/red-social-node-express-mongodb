@@ -1,6 +1,8 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,7 +35,9 @@ async function connectDB() {
 }
 
 
+
 app.use(cors());
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('¡Express está funcionando!');
@@ -95,7 +99,7 @@ app.get('/api/profile', async (req, res) => {
 // Endpoint de registro
 app.post('/api/register', async (req, res) => {
   try {
-    const { nombre, email, password, avatar } = req.body;
+    const { nombre, email, password } = req.body;
     if (!nombre || !email || !password) {
       return res.status(400).json({ error: 'Faltan campos obligatorios.' });
     }
@@ -110,14 +114,13 @@ app.post('/api/register', async (req, res) => {
       nombre,
       email,
       password: hash,
-      avatar: avatar || '',
       fechaRegistro: new Date()
     };
     await db.collection('usuarios').insertOne(nuevoUsuario);
     res.status(201).json({ mensaje: 'Usuario registrado correctamente.' });
   } catch (err) {
     console.error('Error en /api/register:', err);
-    res.status(500).json({ error: 'Error al registrar usuario.' });
+    res.status(500).json({ error: 'Error al registrar usuario.', detalle: err.message });
   }
 });
 
