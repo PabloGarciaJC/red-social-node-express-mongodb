@@ -8,7 +8,7 @@ APP_DIR = /var/www/html
 ## Inicialización de la Aplicación
 ## ---------------------------------------------------------
 .PHONY: init-app 
-init-app: copy-env create-symlink up npm-install npm-host
+init-app: copy-env create-symlink up npm-install npm-host start-server
 
 .PHONY: copy-env
 copy-env:
@@ -93,4 +93,11 @@ build-prod:
 		"cd $(APP_DIR) && npm run build"
 
 
-# node server.cjs
+
+## ---------------------------------------------------------
+## Arranca el backend Node.js manualmente en el contenedor
+## ---------------------------------------------------------
+.PHONY: start-server
+start-server:
+	$(DOCKER_COMPOSE) exec --user node server_docker bash -c \
+		"cd $(APP_DIR) && node server.cjs"

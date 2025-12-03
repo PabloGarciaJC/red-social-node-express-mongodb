@@ -23,7 +23,7 @@ services:
     stdin_open: true
     networks:
       - app_network
-    command: bash -c "cd /var/www/html && node server.cjs"
+    # command: bash -c "cd /var/www/html && node server.cjs"
 
   mongo:
     image: mongo:6.0
