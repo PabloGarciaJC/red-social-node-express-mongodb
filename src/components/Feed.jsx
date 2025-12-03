@@ -24,8 +24,9 @@ const Feed = () => {
         <div className="feed__list">
           {posts.map((post, idx) => (
             <div key={idx} className="feed__post">
-              {/* Si tienes avatar, puedes mostrarlo aquí */}
-              {/* <img src={post.avatar} alt={post.usuario} className="feed__avatar" /> */}
+              {post.avatar && (
+                <img src={post.avatar} alt={post.usuario} className="feed__avatar" />
+              )}
               <div className="feed__info">
                 <div className="feed__user">{post.usuario}</div>
                 <div className="feed__content">{post.contenido}</div>

@@ -10,12 +10,14 @@ appDB.usuarios.insertMany([
   {
     nombre: "Pablo",
     email: "pablo@ejemplo.com",
-    password: "123456"
+    password: "123456",
+    avatar: "https://randomuser.me/api/portraits/men/44.jpg"
   },
   {
     nombre: "Ana",
     email: "ana@ejemplo.com",
-    password: "abcdef"
+    password: "abcdef",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg"
   }
 ]);
 
@@ -58,14 +60,16 @@ appDB.publicaciones.insertMany([
     likes: ["Ana"],
     comentarios: [
       { usuario: "Ana", texto: "Bienvenido!" }
-    ]
+    ],
+    avatar: "https://randomuser.me/api/portraits/men/44.jpg"
   },
   {
     usuario: "Ana",
     contenido: "Disfrutando de un gran día.",
     fecha: new Date(),
     likes: ["Pablo"],
-    comentarios: []
+    comentarios: [],
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg"
   }
 ]);
 
@@ -73,11 +77,21 @@ appDB.publicaciones.insertMany([
 appDB.amigos.insertMany([
   {
     usuario: "Pablo",
-    amigos: ["Ana"]
+    amigos: [
+      {
+        nombre: "Ana",
+        avatar: "https://randomuser.me/api/portraits/women/44.jpg"
+      }
+    ]
   },
   {
     usuario: "Ana",
-    amigos: ["Pablo"]
+    amigos: [
+      {
+        nombre: "Pablo",
+        avatar: "https://randomuser.me/api/portraits/men/44.jpg"
+      }
+    ]
   }
 ]);
 
@@ -87,13 +101,15 @@ appDB.mensajes.insertMany([
     de: "Pablo",
     para: "Ana",
     mensaje: "Hola Ana, ¿cómo estás?",
-    fecha: new Date()
+    fecha: new Date(),
+    avatar: "https://randomuser.me/api/portraits/men/44.jpg"
   },
   {
     de: "Ana",
     para: "Pablo",
     mensaje: "¡Hola Pablo! Todo bien, ¿y tú?",
-    fecha: new Date()
+    fecha: new Date(),
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg"
   }
 ]);
 
@@ -104,14 +120,16 @@ appDB.notificaciones.insertMany([
     tipo: "like",
     mensaje: "Ana le dio like a tu publicación.",
     fecha: new Date(),
-    leido: false
+    leido: false,
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg"
   },
   {
     usuario: "Ana",
     tipo: "comentario",
     mensaje: "Pablo comentó en tu publicación.",
     fecha: new Date(),
-    leido: false
+    leido: false,
+    avatar: "https://randomuser.me/api/portraits/men/44.jpg"
   }
 ]);
 
@@ -120,13 +138,13 @@ appDB.perfiles.insertMany([
   {
     usuario: "Pablo",
     bio: "Desarrollador y amante de la tecnología.",
-    avatar: "pablo.jpg",
+    avatar: "https://randomuser.me/api/portraits/men/44.jpg",
     intereses: ["programación", "música"]
   },
   {
     usuario: "Ana",
     bio: "Apasionada por el arte y la fotografía.",
-    avatar: "ana.jpg",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     intereses: ["arte", "fotografía"]
   }
 ]);
