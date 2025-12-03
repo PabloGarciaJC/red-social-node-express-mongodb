@@ -8,7 +8,7 @@ APP_DIR = /var/www/html
 ## Inicialización de la Aplicación
 ## ---------------------------------------------------------
 .PHONY: init-app 
-init-app: copy-env create-symlink up npm-install npm-host start-server
+init-app: copy-env create-symlink up npm-install npm-host
 
 .PHONY: copy-env
 copy-env:
@@ -91,7 +91,6 @@ npm-host:
 build-prod:
 	$(DOCKER_COMPOSE) exec --user pablogarciajc server_docker bash -c \
 		"cd $(APP_DIR) && npm run build"
-
 
 
 ## ---------------------------------------------------------
