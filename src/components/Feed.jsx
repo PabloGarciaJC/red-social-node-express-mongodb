@@ -6,7 +6,7 @@ const Feed = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/publicaciones')
+    fetch('http://localhost:3000/api/publicaciones')
       .then(res => res.json())
       .then(data => {
         setPosts(data);
@@ -17,7 +17,7 @@ const Feed = () => {
 
   return (
     <div className="feed">
-      <h2 className="feed__title">Feed</h2>
+      <h2 className="feed__title">Publicaciones</h2>
       {loading ? (
         <div>Cargando publicaciones...</div>
       ) : (
@@ -30,7 +30,25 @@ const Feed = () => {
                 <div className="feed__user">{post.usuario}</div>
                 <div className="feed__content">{post.contenido}</div>
                 <div className="feed__time">{post.fecha ? new Date(post.fecha).toLocaleString() : ''}</div>
-                {/* Puedes mostrar likes y comentarios aquí si lo deseas */}
+                  {/* Mostrar likes */}
+                  {post.likes && post.likes.length > 0 && (
+                    <div className="feed__likes">
+                      <strong>Likes:</strong> {post.likes.join(', ')}
+                    </div>
+                  )}
+                  {/* Mostrar comentarios */}
+                  {post.comentarios && post.comentarios.length > 0 && (
+                    <div className="feed__comments">
+                      <strong>Comentarios:</strong>
+                      <ul>
+                        {post.comentarios.map((comentario, cidx) => (
+                          <li key={cidx}>
+                            <span className="feed__comment-user">{comentario.usuario}:</span> {comentario.texto}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
               </div>
             </div>
           ))}

@@ -1,5 +1,6 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const cors = require('cors');
 require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,9 @@ async function connectDB() {
     }
   }
 }
+
+
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('¡Express está funcionando!');
