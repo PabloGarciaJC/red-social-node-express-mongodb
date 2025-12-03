@@ -48,3 +48,85 @@ appDB.comentarios.insertMany([
     calificacion: 2
   }
 ]);
+
+// Colección publicaciones (Feed)
+appDB.publicaciones.insertMany([
+  {
+    usuario: "Pablo",
+    contenido: "¡Hola mundo! Esta es mi primera publicación.",
+    fecha: new Date(),
+    likes: ["Ana"],
+    comentarios: [
+      { usuario: "Ana", texto: "Bienvenido!" }
+    ]
+  },
+  {
+    usuario: "Ana",
+    contenido: "Disfrutando de un gran día.",
+    fecha: new Date(),
+    likes: ["Pablo"],
+    comentarios: []
+  }
+]);
+
+// Colección amigos (Friends)
+appDB.amigos.insertMany([
+  {
+    usuario: "Pablo",
+    amigos: ["Ana"]
+  },
+  {
+    usuario: "Ana",
+    amigos: ["Pablo"]
+  }
+]);
+
+// Colección mensajes (Messages)
+appDB.mensajes.insertMany([
+  {
+    de: "Pablo",
+    para: "Ana",
+    mensaje: "Hola Ana, ¿cómo estás?",
+    fecha: new Date()
+  },
+  {
+    de: "Ana",
+    para: "Pablo",
+    mensaje: "¡Hola Pablo! Todo bien, ¿y tú?",
+    fecha: new Date()
+  }
+]);
+
+// Colección notificaciones (Notifications)
+appDB.notificaciones.insertMany([
+  {
+    usuario: "Pablo",
+    tipo: "like",
+    mensaje: "Ana le dio like a tu publicación.",
+    fecha: new Date(),
+    leido: false
+  },
+  {
+    usuario: "Ana",
+    tipo: "comentario",
+    mensaje: "Pablo comentó en tu publicación.",
+    fecha: new Date(),
+    leido: false
+  }
+]);
+
+// Colección perfiles (Profile)
+appDB.perfiles.insertMany([
+  {
+    usuario: "Pablo",
+    bio: "Desarrollador y amante de la tecnología.",
+    avatar: "pablo.jpg",
+    intereses: ["programación", "música"]
+  },
+  {
+    usuario: "Ana",
+    bio: "Apasionada por el arte y la fotografía.",
+    avatar: "ana.jpg",
+    intereses: ["arte", "fotografía"]
+  }
+]);

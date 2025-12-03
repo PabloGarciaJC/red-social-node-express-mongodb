@@ -50,6 +50,11 @@ shell:
 	$(DOCKER_COMPOSE) exec --user $(USER) server_docker bash
 
 
+.PHONY: logs-server
+logs-server:
+	$(DOCKER_COMPOSE) logs server_docker
+
+
 ## ---------------------------------------------------------
 ## Limpieza de Recursos Docker
 ## ---------------------------------------------------------		
@@ -86,3 +91,6 @@ npm-host:
 build-prod:
 	$(DOCKER_COMPOSE) exec --user pablogarciajc server_docker bash -c \
 		"cd $(APP_DIR) && npm run build"
+
+
+# node server.cjs

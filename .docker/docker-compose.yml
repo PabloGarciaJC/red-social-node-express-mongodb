@@ -16,6 +16,7 @@ services:
     user: node
     ports:
       - "${APP_PORT}:5173"
+      - "3000:3000"
     volumes:
       - ../.:/var/www/html
     tty: true
