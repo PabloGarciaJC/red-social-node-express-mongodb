@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { FaBars } from "react-icons/fa"; // icono de hamburguesa
 import Feed from "./components/Feed";
 import Profile from "./components/Profile";
@@ -9,6 +9,11 @@ import Notifications from "./components/Notifications";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
 import Register from "./components/Register";
+
+function PrivateRoute({ children }) {
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/login" />;
+}
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,7 +26,14 @@ export default function App() {
       <main className="main flex-1 p-6">
         <Routes>
           <Route path="/" element={<Register />} />
-          <Route path="/feed" element={<Feed />} />
+          <Route
+            path="/feed"
+            element={
+              <PrivateRoute>
+                <Feed />
+              </PrivateRoute>
+            }
+          />
           <Route path="/profile" element={<Profile />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/friends" element={<Friends />} />
