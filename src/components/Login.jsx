@@ -24,6 +24,9 @@ const Login = () => {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem('token', data.token);
+        if (data.usuario && data.usuario.email) {
+          localStorage.setItem('email', data.usuario.email);
+        }
         // Redirigir al Feed tras login exitoso
         navigate('/feed');
       } else {

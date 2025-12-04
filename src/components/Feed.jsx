@@ -1,8 +1,43 @@
 import '../index.css';
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaHeart } from 'react-icons/fa';
 
 const Feed = () => {
+            const [likedPosts, setLikedPosts] = useState([]);
+
+            const handleLikeClick = async (postId) => {
+              // Actualizar visualmente de inmediato
+              setPosts(posts => posts.map(p => {
+                if (p._id === postId) {
+                  const email = localStorage.getItem('email');
+                  let nuevoArray = Array.isArray(p.likesUsuarios) ? [...p.likesUsuarios] : [];
+                  let liked = nuevoArray.includes(email);
+                  if (liked) {
+                    nuevoArray = nuevoArray.filter(u => u !== email);
+                  } else {
+                    nuevoArray.push(email);
+                  }
+                  return { ...p, likesUsuarios: nuevoArray, likes: nuevoArray.length };
+                }
+                return p;
+              }));
+              // Sincronizar con la BD
+              try {
+                const res = await fetch(`http://localhost:3000/api/publicaciones/${postId}/like`, {
+                  method: 'POST',
+                  headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                  }
+                });
+                const data = await res.json();
+                if (res.ok && data.likesUsuarios) {
+                  setPosts(posts => posts.map(p => p._id === postId ? { ...p, likes: data.likes, likesUsuarios: data.likesUsuarios } : p));
+                }
+              } catch {
+                // Error de red, no hacer nada
+              }
+            };
           const [editCommentModalOpen, setEditCommentModalOpen] = useState(false);
           const [editCommentContent, setEditCommentContent] = useState("");
           const [editCommentIdx, setEditCommentIdx] = useState(null);
@@ -303,9 +338,14 @@ const Feed = () => {
                 <div className="feed__time">{post.fecha ? new Date(post.fecha).toLocaleString() : ''}</div>
                 {/* Mostrar likes como número */}
                 {typeof post.likes === 'number' ? (
-                  <div className="feed__likes">
-                    <strong>Likes:</strong> {post.likes}
-                  </div>
+                  <button
+                    className="feed__like-btn"
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                    onClick={() => handleLikeClick(post._id)}
+                  >
+                    <FaHeart style={{ color: Array.isArray(post.likesUsuarios) && post.likesUsuarios.includes(localStorage.getItem('email')) ? '#e74c3c' : '#888', marginRight: 4 }} />
+                    {post.likes}
+                  </button>
                 ) : null}
                 {/* Mostrar comentarios solo si existen */}
                 {post.comentarios && post.comentarios.length > 0 && (

@@ -46,6 +46,39 @@ app.get('/', (req, res) => {
 
 
 // Obtener publicaciones
+// Like/Unlike a publicación (toggle)
+app.post('/api/publicaciones/:id/like', async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Obtener usuario desde el token JWT
+    let usuario = 'Anonimo';
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      try {
+        const decoded = jwt.verify(token, 'secreto');
+        usuario = decoded.email || decoded.nombre || 'Anonimo';
+      } catch {}
+    }
+    const pub = await db.collection('publicaciones').findOne({ _id: new ObjectId(id) });
+    if (!pub) return res.status(404).json({ error: 'Publicación no encontrada' });
+    let likesUsuarios = Array.isArray(pub.likesUsuarios) ? pub.likesUsuarios : [];
+    let liked = likesUsuarios.includes(usuario);
+    if (liked) {
+      likesUsuarios = likesUsuarios.filter(u => u !== usuario);
+    } else {
+      likesUsuarios.push(usuario);
+    }
+    const likes = likesUsuarios.length;
+    await db.collection('publicaciones').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { likesUsuarios, likes } }
+    );
+    res.json({ likes, liked: !liked });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al dar/quitar like' });
+  }
+});
 app.get('/api/publicaciones', async (req, res) => {
   try {
     const publicaciones = await db.collection('publicaciones').find({}).toArray();
