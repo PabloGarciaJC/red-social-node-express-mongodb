@@ -331,7 +331,29 @@ const Feed = () => {
             <div key={idx} className="feed__post">
               <div className="feed__info">
                 <div className="feed__user">
-                  <img src={post.avatar ? post.avatar : "https://ui-avatars.com/api/?name=Anonimo&background=cccccc&color=555555"} alt={post.usuario} className="feed__avatar" />
+                  <span
+                    className="feed__avatar"
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      background: '#cccccc',
+                      color: '#222',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 'bold',
+                      fontSize: '1.35em',
+                      marginRight: 12,
+                      border: '2px solid #eee',
+                      textTransform: 'uppercase',
+                      letterSpacing: 1
+                    }}
+                  >
+                    {post.usuario && post.usuario.trim().length > 0
+                      ? post.usuario.trim().replace(/\s+/g, '').substring(0,2).toUpperCase()
+                      : '--'}
+                  </span>
                   {post.usuario}
                 </div>
                 <div className="feed__content">{post.contenido}</div>

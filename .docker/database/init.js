@@ -11,14 +11,12 @@ appDB.usuarios.insertMany([
     nombre: "Pablo",
     email: "pablo@ejemplo.com",
     password: "123456",
-    avatar: "https://randomuser.me/api/portraits/men/44.jpg",
     fechaRegistro: new Date()
   },
   {
     nombre: "Ana",
     email: "ana@ejemplo.com",
     password: "abcdef",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     fechaRegistro: new Date()
   }
 ]);

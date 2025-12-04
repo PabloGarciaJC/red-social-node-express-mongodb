@@ -212,8 +212,6 @@ app.post('/api/publicaciones', async (req, res) => {
     // Obtener token JWT del header Authorization
     const authHeader = req.headers['authorization'];
     let usuario = 'Anonimo';
-    let avatar = '';
-    const AVATAR_DEFAULT = 'https://ui-avatars.com/api/?name=Anonimo&background=cccccc&color=555555';
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
       try {
@@ -222,20 +220,12 @@ app.post('/api/publicaciones', async (req, res) => {
         const userDb = await db.collection('usuarios').findOne({ email: decoded.email });
         if (userDb) {
           usuario = userDb.nombre;
-          avatar = userDb.avatar && userDb.avatar.trim() ? userDb.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(userDb.nombre)}&background=cccccc&color=555555`;
-        } else {
-          avatar = AVATAR_DEFAULT;
         }
-      } catch (err) {
-        avatar = AVATAR_DEFAULT;
-      }
-    } else {
-      avatar = AVATAR_DEFAULT;
+      } catch (err) {}
     }
 
     const nuevaPublicacion = {
       usuario,
-      avatar,
       contenido,
       fecha: new Date(),
       likes: 0,
@@ -336,7 +326,7 @@ app.post('/api/login', async (req, res) => {
     }
     // Generar token JWT
     const token = jwt.sign({ id: usuario._id, email: usuario.email }, 'secreto', { expiresIn: '2h' });
-    res.json({ token, usuario: { nombre: usuario.nombre, email: usuario.email, avatar: usuario.avatar } });
+    res.json({ token, usuario: { nombre: usuario.nombre, email: usuario.email } });
   } catch (err) {
     console.error('Error en /api/login:', err);
     res.status(500).json({ error: 'Error al iniciar sesión.' });

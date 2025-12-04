@@ -25,12 +25,29 @@ const UsuariosOnline = () => {
           {usuarios.map((u, idx) => (
             <li key={idx} className="usuarios-online__item">
               <div className="usuarios-online__avatar-wrap" style={{display:'flex',alignItems:'center'}}>
-                <img
-                  src={u.avatar && u.avatar.trim() ? u.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.nombre)}&background=cccccc&color=555555`}
-                  alt={u.nombre}
+                <span
                   className="usuarios-online__avatar"
-                  style={{width:28,height:28,borderRadius:'50%',objectFit:'cover',marginRight:6,border:'1px solid #eee'}}
-                />
+                  style={{
+                    width: 35,
+                    height: 35,
+                    borderRadius: '50%',
+                    background: '#cccccc',
+                    color: '#222',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '1em',
+                    marginRight: 6,
+                    border: '1px solid #eee',
+                    textTransform: 'uppercase',
+                    letterSpacing: 1
+                  }}
+                >
+                  {u.nombre && u.nombre.trim().length > 0
+                    ? u.nombre.trim().replace(/\s+/g, '').substring(0,2).toUpperCase()
+                    : '--'}
+                </span>
                 <span
                   className="usuarios-online__status"
                   style={{
