@@ -60,6 +60,59 @@ app.get('/api/publicaciones', async (req, res) => {
 // Editar publicación
 // Eliminar publicación
 // Agregar comentario a una publicación
+// Editar comentario en una publicación
+app.put('/api/publicaciones/:id/comentarios/:cid', async (req, res) => {
+  try {
+    const { id, cid } = req.params;
+    const { texto } = req.body;
+    if (!texto || !texto.trim()) {
+      return res.status(400).json({ error: 'El comentario no puede estar vacío.' });
+    }
+    // Buscar la publicación y actualizar el comentario por índice
+    const publicacion = await db.collection('publicaciones').findOne({ _id: new ObjectId(id) });
+    if (!publicacion) {
+      return res.status(404).json({ error: 'Publicación no encontrada.' });
+    }
+    const comentarios = publicacion.comentarios || [];
+    if (!comentarios[cid]) {
+      return res.status(404).json({ error: 'Comentario no encontrado.' });
+    }
+    comentarios[cid].texto = texto;
+    await db.collection('publicaciones').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { comentarios } }
+    );
+    res.json({ mensaje: 'Comentario editado correctamente.' });
+  } catch (err) {
+    console.error('Error en /api/publicaciones/:id/comentarios/:cid (PUT):', err);
+    res.status(500).json({ error: 'Error al editar comentario.' });
+  }
+});
+
+// Eliminar comentario en una publicación
+app.delete('/api/publicaciones/:id/comentarios/:cid', async (req, res) => {
+  try {
+    const { id, cid } = req.params;
+    // Buscar la publicación y eliminar el comentario por índice
+    const publicacion = await db.collection('publicaciones').findOne({ _id: new ObjectId(id) });
+    if (!publicacion) {
+      return res.status(404).json({ error: 'Publicación no encontrada.' });
+    }
+    const comentarios = publicacion.comentarios || [];
+    if (!comentarios[cid]) {
+      return res.status(404).json({ error: 'Comentario no encontrado.' });
+    }
+    comentarios.splice(cid, 1);
+    await db.collection('publicaciones').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { comentarios } }
+    );
+    res.json({ mensaje: 'Comentario eliminado correctamente.' });
+  } catch (err) {
+    console.error('Error en /api/publicaciones/:id/comentarios/:cid (DELETE):', err);
+    res.status(500).json({ error: 'Error al eliminar comentario.' });
+  }
+});
 app.post('/api/publicaciones/:id/comentarios', async (req, res) => {
   try {
     const { id } = req.params;

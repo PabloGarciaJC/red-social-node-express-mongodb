@@ -3,6 +3,93 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Feed = () => {
+          const [editCommentModalOpen, setEditCommentModalOpen] = useState(false);
+          const [editCommentContent, setEditCommentContent] = useState("");
+          const [editCommentIdx, setEditCommentIdx] = useState(null);
+          const [editCommentPostId, setEditCommentPostId] = useState(null);
+          const [deleteCommentModalOpen, setDeleteCommentModalOpen] = useState(false);
+          const [deleteCommentIdx, setDeleteCommentIdx] = useState(null);
+          const [deleteCommentPostId, setDeleteCommentPostId] = useState(null);
+
+          // Abrir modal de edición de comentario
+          const handleEditCommentClick = (postId, idx, texto) => {
+            setEditCommentPostId(postId);
+            setEditCommentIdx(idx);
+            setEditCommentContent(texto);
+            setEditCommentModalOpen(true);
+          };
+
+          // Guardar edición de comentario
+          const handleEditCommentSave = async () => {
+            if (!editCommentContent.trim()) {
+              setError("El comentario no puede estar vacío.");
+              return;
+            }
+            try {
+              const res = await fetch(`http://localhost:3000/api/publicaciones/${editCommentPostId}/comentarios/${editCommentIdx}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ texto: editCommentContent })
+              });
+              const data = await res.json();
+              if (res.ok) {
+                setEditCommentModalOpen(false);
+                setEditCommentContent("");
+                setEditCommentIdx(null);
+                setEditCommentPostId(null);
+                setSuccess("¡Comentario editado!");
+                fetch('http://localhost:3000/api/publicaciones')
+                  .then(res => res.json())
+                  .then(pubs => {
+                    const ordenadas = pubs.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                    setPosts(ordenadas);
+                  });
+              } else {
+                setError(data.error || "Error al editar comentario");
+              }
+            } catch {
+              setError("Error de red");
+            }
+          };
+
+          // Abrir modal de confirmación para eliminar comentario
+          const handleDeleteCommentClick = (postId, idx) => {
+            setDeleteCommentPostId(postId);
+            setDeleteCommentIdx(idx);
+            setDeleteCommentModalOpen(true);
+          };
+
+          // Eliminar comentario
+          const handleDeleteCommentConfirm = async () => {
+            try {
+              const res = await fetch(`http://localhost:3000/api/publicaciones/${deleteCommentPostId}/comentarios/${deleteCommentIdx}`, {
+                method: 'DELETE',
+                headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+              });
+              const data = await res.json();
+              if (res.ok) {
+                setDeleteCommentModalOpen(false);
+                setDeleteCommentIdx(null);
+                setDeleteCommentPostId(null);
+                setSuccess('¡Comentario eliminado!');
+                fetch('http://localhost:3000/api/publicaciones')
+                  .then(res => res.json())
+                  .then(pubs => {
+                    const ordenadas = pubs.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                    setPosts(ordenadas);
+                  });
+              } else {
+                setError(data.error || 'Error al eliminar comentario');
+              }
+            } catch {
+              setError('Error de red');
+            }
+          };
         const [commentContent, setCommentContent] = useState("");
         const [commentingPostId, setCommentingPostId] = useState(null);
 
@@ -230,11 +317,53 @@ const Feed = () => {
                           <span className="feed__comment-content">
                             <span className="feed__comment-user">{comentario.usuario}:</span> {comentario.texto}
                           </span>
+                          <span>
+                            <button className="feed__comment-action-btn" title="Editar" style={{fontSize:'0.95em'}} onClick={() => handleEditCommentClick(post._id, cidx, comentario.texto)}>
+                              <FaEdit />
+                            </button>
+                            <button className="feed__comment-action-btn feed__action-icon--delete" title="Eliminar" style={{fontSize:'0.95em'}} onClick={() => handleDeleteCommentClick(post._id, cidx)}>
+                              <FaTrash />
+                            </button>
+                          </span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
+                      {/* Modal para editar comentario */}
+                      {editCommentModalOpen && (
+                        <div className="feed__modal-overlay">
+                          <div className="feed__modal">
+                            <h3>Editar comentario</h3>
+                            <textarea
+                              className="feed__form-textarea"
+                              value={editCommentContent}
+                              onChange={e => setEditCommentContent(e.target.value)}
+                              rows={2}
+                            />
+                            <div className="feed__modal-actions">
+                              <button className="feed__form-btn" onClick={handleEditCommentSave}>Guardar</button>
+                              <button className="feed__form-btn" onClick={() => setEditCommentModalOpen(false)}>Cancelar</button>
+                            </div>
+                            {error && <div className="feed__error">{error}</div>}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Modal para eliminar comentario */}
+                      {deleteCommentModalOpen && (
+                        <div className="feed__modal-overlay">
+                          <div className="feed__modal">
+                            <h3>¿Deseas eliminar este comentario?</h3>
+                            <p>Esta acción no se puede deshacer.</p>
+                            <div className="feed__modal-actions">
+                              <button className="feed__form-btn" onClick={handleDeleteCommentConfirm}>Sí, eliminar</button>
+                              <button className="feed__form-btn" onClick={() => setDeleteCommentModalOpen(false)}>Cancelar</button>
+                            </div>
+                            {error && <div className="feed__error">{error}</div>}
+                          </div>
+                        </div>
+                      )}
                 {/* Formulario para agregar comentario */}
                 <form className="feed__form" style={{marginTop:8}} onSubmit={e => { setCommentingPostId(post._id); handleCommentSubmit(e, post._id); }}>
                   <textarea

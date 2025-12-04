@@ -821,4 +821,17 @@ html {
 
 .feed__action-icon:hover:not(.feed__action-icon--delete) {
   color: #1877f2;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 6px;
+  color: #555;
+  padding: 2px 4px;
+  font-size: 0.95em;
+  vertical-align: middle;
+  transition: color 0.2s;
 }
+.feed__comment-action-btn:hover {
+  color: #007bff;
+}
+
