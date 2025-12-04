@@ -1,3 +1,36 @@
+/* Estilos para el modal de edición de publicaciones */
+.feed__modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.feed__modal {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  min-width: 320px;
+  max-width: 90vw;
+}
+
+.feed__modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.feed__modal h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
 /* Mensaje de éxito en el feed */
 .feed__success {
   margin-top: 10px;

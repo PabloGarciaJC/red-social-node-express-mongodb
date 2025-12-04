@@ -3,6 +3,52 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Feed = () => {
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [editPost, setEditPost] = useState(null);
+    const [editContenido, setEditContenido] = useState("");
+
+    // Abrir modal de edición
+    const handleEditClick = (post) => {
+      setEditPost(post);
+      setEditContenido(post.contenido);
+      setEditModalOpen(true);
+    };
+
+    // Guardar cambios de edición
+    const handleEditSave = async () => {
+      if (!editContenido.trim()) {
+        setError("El contenido no puede estar vacío.");
+        return;
+      }
+      try {
+        const res = await fetch(`http://localhost:3000/api/publicaciones/${editPost._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ contenido: editContenido })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setEditModalOpen(false);
+          setEditPost(null);
+          setEditContenido("");
+          setSuccess("¡Publicación editada!");
+          // Recargar publicaciones
+          fetch('http://localhost:3000/api/publicaciones')
+            .then(res => res.json())
+            .then(pubs => {
+              const ordenadas = pubs.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+              setPosts(ordenadas);
+            });
+        } else {
+          setError(data.error || "Error al editar publicación");
+        }
+      } catch {
+        setError("Error de red");
+      }
+    };
   const [posts, setPosts] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -113,7 +159,7 @@ const Feed = () => {
                             <span className="feed__comment-user">{comentario.usuario}:</span> {comentario.texto}
                           </span>
                           <span>
-                            <button className="feed__comment-action-btn" title="Editar">
+                            <button className="feed__comment-action-btn" title="Editar" onClick={() => handleEditClick(post)}>
                               <FaEdit />
                             </button>
                             <button className="feed__comment-action-btn feed__action-icon--delete" title="Eliminar">
@@ -127,7 +173,7 @@ const Feed = () => {
                 )}
               </div>
               <div className="feed__actions">
-                <span className="feed__action-icon" title="Editar">
+                <span className="feed__action-icon" title="Editar" onClick={() => handleEditClick(post)} style={{ cursor: 'pointer' }}>
                   <FaEdit />
                 </span>
                 <span className="feed__action-icon feed__action-icon--delete" title="Eliminar">
@@ -136,6 +182,26 @@ const Feed = () => {
               </div>
             </div>
           ))}
+
+          {/* Popup modal para editar publicación */}
+          {editModalOpen && (
+            <div className="feed__modal-overlay">
+              <div className="feed__modal">
+                <h3>Editar publicación</h3>
+                <textarea
+                  className="feed__form-textarea"
+                  value={editContenido}
+                  onChange={e => setEditContenido(e.target.value)}
+                  rows={3}
+                />
+                <div className="feed__modal-actions">
+                  <button className="feed__form-btn" onClick={handleEditSave}>Guardar</button>
+                  <button className="feed__form-btn" onClick={() => setEditModalOpen(false)}>Cancelar</button>
+                </div>
+                {error && <div className="feed__error">{error}</div>}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

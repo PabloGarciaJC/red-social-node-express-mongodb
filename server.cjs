@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -57,6 +57,27 @@ app.get('/api/publicaciones', async (req, res) => {
 });
 
 // Crear publicación
+// Editar publicación
+app.put('/api/publicaciones/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { contenido } = req.body;
+    if (!contenido || !contenido.trim()) {
+      return res.status(400).json({ error: 'El contenido es obligatorio.' });
+    }
+    const resultado = await db.collection('publicaciones').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { contenido } }
+    );
+    if (resultado.matchedCount === 0) {
+      return res.status(404).json({ error: 'Publicación no encontrada.' });
+    }
+    res.json({ mensaje: 'Publicación actualizada correctamente.' });
+  } catch (err) {
+    console.error('Error en /api/publicaciones/:id (PUT):', err);
+    res.status(500).json({ error: 'Error al editar publicación.' });
+  }
+});
 app.post('/api/publicaciones', async (req, res) => {
   try {
     const { contenido } = req.body;
