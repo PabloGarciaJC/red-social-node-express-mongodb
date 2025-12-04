@@ -205,45 +205,102 @@ html {
 }
 
 .feed__post {
-  display: flex;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
-  padding: 20px;
-  gap: 20px;
+  box-shadow: 0 4px 16px rgba(24,119,242,0.08);
+  border: 1.5px solid #e3e6ea;
+  padding: 24px 20px;
+  display: flex;
+  gap: 18px;
   align-items: flex-start;
-  border: 1px solid #e3e6ea;
+  position: relative;
 }
 
 .feed__avatar {
-  width: 60px;
-  height: 60px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #1877f2;
+  border: 2.5px solid #1877f2;
+  box-shadow: 0 2px 8px rgba(24,119,242,0.08);
+  margin-right: 8px;
+}
+
+.feed__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .feed__user {
-  font-weight: 600;
-  color: #1877f2;
-  font-size: 1.1rem;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #1456b8;
+  margin-bottom: 2px;
 }
 
 .feed__content {
+  font-size: 1.05rem;
   color: #222;
-  margin-bottom: 10px;
-  font-size: 1rem;
+  margin-bottom: 4px;
+  word-break: break-word;
 }
 
 .feed__time {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #888;
+  margin-bottom: 6px;
+}
+
+.feed__likes {
+  font-size: 0.98rem;
+  color: #1877f2;
+  margin-bottom: 2px;
+}
+
+.feed__comments {
+  background: #f7faff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 6px;
+  margin-bottom: 2px;
+  box-shadow: 0 2px 8px rgba(24,119,242,0.05);
+}
+
+.feed__comments ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feed__comments li {
+  padding: 6px 0;
+  border-bottom: 1px solid #e3e6ea;
+  font-size: 0.98rem;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: space-between;
+}
+
+.feed__comments li:last-child {
+  border-bottom: none;
+}
+
+.feed__comment-user {
+  font-weight: 600;
+  color: #1456b8;
+  margin-right: 4px;
 }
 
 .feed__actions {
+  position: absolute;
+  top: 18px;
+  right: 18px;
   display: flex;
-  gap: 10px;
-  margin-top: 12px;
+  margin-top: 0;
 }
 
 .feed__edit-btn {
@@ -653,4 +710,50 @@ html {
 
 .usuarios-online {
   align-self: flex-start;
+}
+
+.feed__comment-action-btn {
+  padding: 6px 6px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #f7faff;
+  color: #1456b8;
+  transition: background 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.feed__comment-action-btn:hover {
+  background: #e3e6ea;
+  color: #1877f2;
+}
+
+
+
+.feed__comment-action-btn.feed__action-icon--delete:hover {
+  color: #b71c1c;
+}
+
+.feed__action-icon {
+  font-size: 1.25rem;
+  color: #1456b8;
+  cursor: pointer;
+  padding: 6px;
+  transition: background 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+
+
+.feed__action-icon--delete:hover {
+  color: #b71c1c;
+}
+
+.feed__action-icon:hover:not(.feed__action-icon--delete) {
+  color: #1877f2;
 }

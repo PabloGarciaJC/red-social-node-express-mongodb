@@ -1,5 +1,6 @@
 import '../index.css';
 import React, { useEffect, useState } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
@@ -85,17 +86,30 @@ const Feed = () => {
                     <ul>
                       {post.comentarios.map((comentario, cidx) => (
                         <li key={cidx}>
-                          <span className="feed__comment-user">{comentario.usuario}:</span> {comentario.texto}
+                          <span className="feed__comment-content">
+                            <span className="feed__comment-user">{comentario.usuario}:</span> {comentario.texto}
+                          </span>
+                          <span>
+                            <button className="feed__comment-action-btn" title="Editar">
+                              <FaEdit />
+                            </button>
+                            <button className="feed__comment-action-btn feed__action-icon--delete" title="Eliminar">
+                              <FaTrash />
+                            </button>
+                          </span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
-                {/* Botones editar y eliminar */}
-                <div className="feed__actions">
-                  <button className="feed__edit-btn" style={{marginRight:8, padding:'6px 16px', borderRadius:6, background:'#f0f2f5', border:'1px solid #e3e6ea', cursor:'pointer', fontWeight:600}}>Editar</button>
-                  <button className="feed__delete-btn" style={{padding:'6px 16px', borderRadius:6, background:'#e53935', color:'#fff', border:'none', cursor:'pointer', fontWeight:600}}>Eliminar</button>
-                </div>
+              </div>
+              <div className="feed__actions">
+                <span className="feed__action-icon" title="Editar">
+                  <FaEdit />
+                </span>
+                <span className="feed__action-icon feed__action-icon--delete" title="Eliminar">
+                  <FaTrash />
+                </span>
               </div>
             </div>
           ))}
