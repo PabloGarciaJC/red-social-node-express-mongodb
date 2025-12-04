@@ -17,6 +17,8 @@ const MONGO_URL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MON
 
 let db;
 
+// ...existing code...
+
 async function connectDB() {
   let connected = false;
 
@@ -342,6 +344,15 @@ app.post('/api/login', async (req, res) => {
 });
 
 connectDB().then(() => {
+  // Obtener todos los usuarios registrados
+  app.get('/api/usuarios', async (req, res) => {
+    try {
+      const usuarios = await db.collection('usuarios').find({}, { projection: { password: 0 } }).toArray();
+      res.json(usuarios);
+    } catch (err) {
+      res.status(500).json({ error: 'Error al obtener usuarios' });
+    }
+  });
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor escuchando en http://0.0.0.0:${PORT}`);
   });

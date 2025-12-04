@@ -24,9 +24,24 @@ const UsuariosOnline = () => {
         <ul className="usuarios-online__list">
           {usuarios.map((u, idx) => (
             <li key={idx} className="usuarios-online__item">
-              <div className="usuarios-online__avatar-wrap">
-                {/* El avatar debe venir de la colección de usuarios, no de usuarios conectados */}
-                <span className={`usuarios-online__status ${u.online ? 'online' : 'offline'}`}></span>
+              <div className="usuarios-online__avatar-wrap" style={{display:'flex',alignItems:'center'}}>
+                <img
+                  src={u.avatar && u.avatar.trim() ? u.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.nombre)}&background=cccccc&color=555555`}
+                  alt={u.nombre}
+                  className="usuarios-online__avatar"
+                  style={{width:28,height:28,borderRadius:'50%',objectFit:'cover',marginRight:6,border:'1px solid #eee'}}
+                />
+                <span
+                  className="usuarios-online__status"
+                  style={{
+                    display: 'inline-block',
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    background: u.email === localStorage.getItem('email') ? '#4caf50' : '#bbb',
+                    marginRight: 8
+                  }}
+                ></span>
               </div>
               <span className="usuarios-online__nombre">{u.nombre}</span>
             </li>
