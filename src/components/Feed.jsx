@@ -31,20 +31,19 @@ const Feed = () => {
       return;
     }
     try {
+      const usuario = localStorage.getItem('usuario');
       const res = await fetch('http://localhost:3000/api/publicaciones', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ contenido })
+        body: JSON.stringify({ contenido, usuario })
       });
       const data = await res.json();
       if (res.ok) {
         setContenido("");
         setSuccess("¡Publicación creada!");
-        // Recargar publicaciones desde el backend
-        // Recargar publicaciones y usuarios
         fetch('http://localhost:3000/api/publicaciones')
           .then(res => res.json())
           .then(pubs => {
