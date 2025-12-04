@@ -58,6 +58,20 @@ app.get('/api/publicaciones', async (req, res) => {
 
 // Crear publicación
 // Editar publicación
+// Eliminar publicación
+app.delete('/api/publicaciones/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const resultado = await db.collection('publicaciones').deleteOne({ _id: new ObjectId(id) });
+    if (resultado.deletedCount === 0) {
+      return res.status(404).json({ error: 'Publicación no encontrada.' });
+    }
+    res.json({ mensaje: 'Publicación eliminada correctamente.' });
+  } catch (err) {
+    console.error('Error en /api/publicaciones/:id (DELETE):', err);
+    res.status(500).json({ error: 'Error al eliminar publicación.' });
+  }
+});
 app.put('/api/publicaciones/:id', async (req, res) => {
   try {
     const { id } = req.params;

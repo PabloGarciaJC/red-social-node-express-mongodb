@@ -1,3 +1,7 @@
+## Reiniciar el servidor Node.js manualmente en el contenedor
+.PHONY: restart-server
+restart-server:
+	$(DOCKER_COMPOSE) exec --user node server_docker bash -c "cd $(APP_DIR) && pkill -f server.cjs || true && node server.cjs &"
 ## ---------------------------------------------------------
 ## Variables base
 ## ---------------------------------------------------------

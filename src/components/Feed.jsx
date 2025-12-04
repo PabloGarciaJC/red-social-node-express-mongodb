@@ -3,6 +3,43 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Feed = () => {
+      const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+      const [deletePost, setDeletePost] = useState(null);
+
+      // Abrir modal de confirmación para eliminar
+      const handleDeleteClick = (post) => {
+        setDeletePost(post);
+        setDeleteModalOpen(true);
+      };
+
+      // Eliminar publicación
+      const handleDeleteConfirm = async () => {
+        try {
+          const res = await fetch(`http://localhost:3000/api/publicaciones/${deletePost._id}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+          });
+          const data = await res.json();
+          if (res.ok) {
+            setDeleteModalOpen(false);
+            setDeletePost(null);
+            setSuccess('¡Publicación eliminada!');
+            // Recargar publicaciones
+            fetch('http://localhost:3000/api/publicaciones')
+              .then(res => res.json())
+              .then(pubs => {
+                const ordenadas = pubs.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                setPosts(ordenadas);
+              });
+          } else {
+            setError(data.error || 'Error al eliminar publicación');
+          }
+        } catch {
+          setError('Error de red');
+        }
+      };
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editPost, setEditPost] = useState(null);
     const [editContenido, setEditContenido] = useState("");
@@ -176,9 +213,23 @@ const Feed = () => {
                 <span className="feed__action-icon" title="Editar" onClick={() => handleEditClick(post)} style={{ cursor: 'pointer' }}>
                   <FaEdit />
                 </span>
-                <span className="feed__action-icon feed__action-icon--delete" title="Eliminar">
+                <span className="feed__action-icon feed__action-icon--delete" title="Eliminar" onClick={() => handleDeleteClick(post)} style={{ cursor: 'pointer' }}>
                   <FaTrash />
                 </span>
+                    {/* Modal de confirmación para eliminar publicación */}
+                    {deleteModalOpen && (
+                      <div className="feed__modal-overlay">
+                        <div className="feed__modal">
+                          <h3>¿Deseas eliminar esta publicación?</h3>
+                          <p>Esta acción no se puede deshacer.</p>
+                          <div className="feed__modal-actions">
+                            <button className="feed__form-btn" onClick={handleDeleteConfirm}>Sí, eliminar</button>
+                            <button className="feed__form-btn" onClick={() => setDeleteModalOpen(false)}>Cancelar</button>
+                          </div>
+                          {error && <div className="feed__error">{error}</div>}
+                        </div>
+                      </div>
+                    )}
               </div>
             </div>
           ))}
