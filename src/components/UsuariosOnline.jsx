@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import '../index.css';
 
 const UsuariosOnline = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
+    setLoading(true);
     fetch('http://localhost:3000/api/usuarios')
       .then(res => res.json())
       .then(data => {
@@ -13,7 +16,7 @@ const UsuariosOnline = () => {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [location.pathname]);
 
   return (
     <aside className="usuarios-online">

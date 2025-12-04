@@ -24,8 +24,25 @@ const Register = ({ onBack }) => {
       });
       const data = await res.json();
       if (res.ok) {
-        setSuccess('¡Registro exitoso! Ahora puedes iniciar sesión.');
-        setNombre(''); setEmail(''); setPassword('');
+        // Registro exitoso, ahora iniciar sesión automáticamente
+        const loginRes = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const loginData = await loginRes.json();
+        if (loginRes.ok) {
+          localStorage.setItem('token', loginData.token);
+          if (loginData.usuario && loginData.usuario.email) {
+            localStorage.setItem('email', loginData.usuario.email);
+          }
+          if (loginData.usuario && loginData.usuario.nombre) {
+            localStorage.setItem('nombre', loginData.usuario.nombre);
+          }
+          navigate('/feed');
+        } else {
+          setError('Registro exitoso, pero error al iniciar sesión.');
+        }
       } else {
         setError(data.error || 'Error al registrar');
       }

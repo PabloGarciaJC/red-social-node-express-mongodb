@@ -1,5 +1,6 @@
 import '../index.css';
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { FaHeart } from 'react-icons/fa';
 
@@ -249,9 +250,10 @@ const Feed = () => {
   const [contenido, setContenido] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
-    // Obtener publicaciones y usuarios en paralelo
+    setLoading(true);
     fetch('http://localhost:3000/api/publicaciones')
       .then(res => res.json())
       .then(pubs => {
@@ -260,7 +262,7 @@ const Feed = () => {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [localStorage.getItem('token')]);
+  }, [location.pathname]);
 
   const handleCrear = async (e) => {
     e.preventDefault();

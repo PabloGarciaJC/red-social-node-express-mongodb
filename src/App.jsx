@@ -18,10 +18,28 @@ function PrivateRoute({ children }) {
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-  const token = localStorage.getItem('token');
+  // Escuchar cambios en localStorage para el token
+  React.useEffect(() => {
+    const onStorage = () => {
+      setToken(localStorage.getItem('token'));
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  // También actualizar el token tras login/registro en la misma pestaña
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const currentToken = localStorage.getItem('token');
+      if (currentToken !== token) setToken(currentToken);
+    }, 500);
+    return () => clearInterval(interval);
+  }, [token]);
+
   return (
     <div className="app flex flex-col min-h-screen bg-gray-100">
       <Navbar />

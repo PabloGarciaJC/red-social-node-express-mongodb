@@ -30,8 +30,8 @@ const Login = () => {
         if (data.usuario && data.usuario.nombre) {
           localStorage.setItem('nombre', data.usuario.nombre);
         }
-        // Redirigir al Feed tras login exitoso y forzar recarga
-        window.location.href = '/feed';
+        // Redirigir al Feed tras login exitoso usando navigate
+        navigate('/feed');
       } else {
         setError(data.error || 'Error al iniciar sesión');
       }
