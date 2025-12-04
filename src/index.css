@@ -1,3 +1,16 @@
+body {
+  background-color: #f0f2f5;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
 /* ====== LOGIN & REGISTER ====== */
 .login, .register {
   max-width: 400px;
@@ -86,19 +99,6 @@
 }
 .login__register-link button:hover, .register__back-link button:hover {
   color: #1456b8;
-}
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-body {
-  background-color: #f0f2f5;
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
-  color: #222;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 /* ====== NAVBAR ====== */
