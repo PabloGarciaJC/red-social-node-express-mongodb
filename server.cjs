@@ -59,6 +59,28 @@ app.get('/api/publicaciones', async (req, res) => {
 // Crear publicación
 // Editar publicación
 // Eliminar publicación
+// Agregar comentario a una publicación
+app.post('/api/publicaciones/:id/comentarios', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { usuario, texto } = req.body;
+    if (!texto || !texto.trim()) {
+      return res.status(400).json({ error: 'El comentario no puede estar vacío.' });
+    }
+    const comentario = { usuario, texto };
+    const resultado = await db.collection('publicaciones').updateOne(
+      { _id: new ObjectId(id) },
+      { $push: { comentarios: comentario } }
+    );
+    if (resultado.matchedCount === 0) {
+      return res.status(404).json({ error: 'Publicación no encontrada.' });
+    }
+    res.json({ mensaje: 'Comentario agregado correctamente.' });
+  } catch (err) {
+    console.error('Error en /api/publicaciones/:id/comentarios (POST):', err);
+    res.status(500).json({ error: 'Error al agregar comentario.' });
+  }
+});
 app.delete('/api/publicaciones/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -128,7 +150,7 @@ app.post('/api/publicaciones', async (req, res) => {
       avatar,
       contenido,
       fecha: new Date(),
-      likes: [],
+      likes: 0,
       comentarios: []
     };
     const resultado = await db.collection('publicaciones').insertOne(nuevaPublicacion);

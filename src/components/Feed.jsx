@@ -3,6 +3,41 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Feed = () => {
+        const [commentContent, setCommentContent] = useState("");
+        const [commentingPostId, setCommentingPostId] = useState(null);
+
+        // Crear comentario en una publicación
+        const handleCommentSubmit = async (e, postId) => {
+          e.preventDefault();
+          if (!commentContent.trim()) return;
+          try {
+            const usuario = localStorage.getItem('usuario') || 'Anonimo';
+            const res = await fetch(`http://localhost:3000/api/publicaciones/${postId}/comentarios`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify({ usuario, texto: commentContent })
+            });
+            const data = await res.json();
+            if (res.ok) {
+              setCommentContent("");
+              setCommentingPostId(null);
+              // Recargar publicaciones
+              fetch('http://localhost:3000/api/publicaciones')
+                .then(res => res.json())
+                .then(pubs => {
+                  const ordenadas = pubs.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                  setPosts(ordenadas);
+                });
+            } else {
+              setError(data.error || "Error al agregar comentario");
+            }
+          } catch {
+            setError("Error de red");
+          }
+        };
       const [deleteModalOpen, setDeleteModalOpen] = useState(false);
       const [deletePost, setDeletePost] = useState(null);
 
@@ -185,7 +220,7 @@ const Feed = () => {
                     <strong>Likes:</strong> {post.likes}
                   </div>
                 ) : null}
-                {/* Mostrar comentarios */}
+                {/* Mostrar comentarios solo si existen */}
                 {post.comentarios && post.comentarios.length > 0 && (
                   <div className="feed__comments">
                     <strong>Comentarios:</strong>
@@ -195,19 +230,22 @@ const Feed = () => {
                           <span className="feed__comment-content">
                             <span className="feed__comment-user">{comentario.usuario}:</span> {comentario.texto}
                           </span>
-                          <span>
-                            <button className="feed__comment-action-btn" title="Editar" onClick={() => handleEditClick(post)}>
-                              <FaEdit />
-                            </button>
-                            <button className="feed__comment-action-btn feed__action-icon--delete" title="Eliminar">
-                              <FaTrash />
-                            </button>
-                          </span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
+                {/* Formulario para agregar comentario */}
+                <form className="feed__form" style={{marginTop:8}} onSubmit={e => { setCommentingPostId(post._id); handleCommentSubmit(e, post._id); }}>
+                  <textarea
+                    className="feed__form-textarea"
+                    value={commentingPostId === post._id ? commentContent : ""}
+                    onChange={e => { setCommentingPostId(post._id); setCommentContent(e.target.value); }}
+                    placeholder="Escribe un comentario..."
+                    rows={2}
+                  />
+                  <button type="submit" className="feed__form-btn">Comentar</button>
+                </form>
               </div>
               <div className="feed__actions">
                 <span className="feed__action-icon" title="Editar" onClick={() => handleEditClick(post)} style={{ cursor: 'pointer' }}>
