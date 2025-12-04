@@ -4,16 +4,19 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [contenido, setContenido] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
+    // Obtener publicaciones y usuarios en paralelo
     fetch('http://localhost:3000/api/publicaciones')
       .then(res => res.json())
-      .then(data => {
-        setPosts(data);
+      .then(pubs => {
+        const ordenadas = pubs.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        setPosts(ordenadas);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -41,9 +44,13 @@ const Feed = () => {
         setContenido("");
         setSuccess("¡Publicación creada!");
         // Recargar publicaciones desde el backend
+        // Recargar publicaciones y usuarios
         fetch('http://localhost:3000/api/publicaciones')
           .then(res => res.json())
-          .then(data => setPosts(data));
+          .then(pubs => {
+            const ordenadas = pubs.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            setPosts(ordenadas);
+          });
       } else {
         setError(data.error || "Error al crear publicación");
       }
@@ -83,19 +90,19 @@ const Feed = () => {
         <div className="feed__list">
           {posts.map((post, idx) => (
             <div key={idx} className="feed__post">
-              {post.avatar && (
-                <img src={post.avatar} alt={post.usuario} className="feed__avatar" />
-              )}
               <div className="feed__info">
-                <div className="feed__user">{post.usuario}</div>
+                <div className="feed__user">
+                  <img src={post.avatar ? post.avatar : "https://ui-avatars.com/api/?name=Anonimo&background=cccccc&color=555555"} alt={post.usuario} className="feed__avatar" />
+                  {post.usuario}
+                </div>
                 <div className="feed__content">{post.contenido}</div>
                 <div className="feed__time">{post.fecha ? new Date(post.fecha).toLocaleString() : ''}</div>
-                {/* Mostrar likes */}
-                {post.likes && post.likes.length > 0 && (
+                {/* Mostrar likes como número */}
+                {typeof post.likes === 'number' ? (
                   <div className="feed__likes">
-                    <strong>Likes:</strong> {post.likes.join(', ')}
+                    <strong>Likes:</strong> {post.likes}
                   </div>
-                )}
+                ) : null}
                 {/* Mostrar comentarios */}
                 {post.comentarios && post.comentarios.length > 0 && (
                   <div className="feed__comments">

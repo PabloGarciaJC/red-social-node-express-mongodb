@@ -26,9 +26,7 @@ const Notifications = () => {
         <div className="notifications__list">
           {notifications.map((n, idx) => (
             <div key={idx} className="notifications__item">
-              {n.avatar && (
-                <img src={n.avatar} alt={n.usuario} className="notifications__avatar" />
-              )}
+              {/* El avatar debe venir de la colección de usuarios, no de notificaciones */}
               <div className="notifications__text">{n.mensaje}</div>
               <div className="notifications__time">{n.fecha ? new Date(n.fecha).toLocaleString() : ''}</div>
             </div>

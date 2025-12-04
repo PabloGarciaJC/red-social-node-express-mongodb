@@ -63,9 +63,34 @@ app.post('/api/publicaciones', async (req, res) => {
     if (!contenido || !contenido.trim()) {
       return res.status(400).json({ error: 'El contenido es obligatorio.' });
     }
-    // Puedes obtener el usuario desde el token si lo implementas
+
+    // Obtener token JWT del header Authorization
+    const authHeader = req.headers['authorization'];
+    let usuario = 'Anonimo';
+    let avatar = '';
+    const AVATAR_DEFAULT = 'https://ui-avatars.com/api/?name=Anonimo&background=cccccc&color=555555';
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      try {
+        const decoded = jwt.verify(token, 'secreto');
+        // Buscar usuario en la base de datos
+        const userDb = await db.collection('usuarios').findOne({ email: decoded.email });
+        if (userDb) {
+          usuario = userDb.nombre;
+          avatar = userDb.avatar && userDb.avatar.trim() ? userDb.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(userDb.nombre)}&background=cccccc&color=555555`;
+        } else {
+          avatar = AVATAR_DEFAULT;
+        }
+      } catch (err) {
+        avatar = AVATAR_DEFAULT;
+      }
+    } else {
+      avatar = AVATAR_DEFAULT;
+    }
+
     const nuevaPublicacion = {
-      usuario: 'Anonimo', // Cambia esto por el usuario real si tienes auth
+      usuario,
+      avatar,
       contenido,
       fecha: new Date(),
       likes: [],

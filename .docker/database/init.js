@@ -62,19 +62,17 @@ appDB.publicaciones.insertMany([
     usuario: "Pablo",
     contenido: "¡Hola mundo! Esta es mi primera publicación.",
     fecha: new Date(),
-    likes: ["Ana"],
+    likes: 1,
     comentarios: [
       { usuario: "Ana", texto: "Bienvenido!" }
-    ],
-    avatar: "https://randomuser.me/api/portraits/men/44.jpg"
+    ]
   },
   {
     usuario: "Ana",
     contenido: "Disfrutando de un gran día.",
     fecha: new Date(),
-    likes: ["Pablo"],
-    comentarios: [],
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg"
+    likes: 1,
+    comentarios: []
   }
 ]);
 
@@ -84,8 +82,7 @@ appDB.amigos.insertMany([
     usuario: "Pablo",
     amigos: [
       {
-        nombre: "Ana",
-        avatar: "https://randomuser.me/api/portraits/women/44.jpg"
+        nombre: "Ana"
       }
     ]
   },
@@ -93,8 +90,7 @@ appDB.amigos.insertMany([
     usuario: "Ana",
     amigos: [
       {
-        nombre: "Pablo",
-        avatar: "https://randomuser.me/api/portraits/men/44.jpg"
+        nombre: "Pablo"
       }
     ]
   }
@@ -106,15 +102,13 @@ appDB.mensajes.insertMany([
     de: "Pablo",
     para: "Ana",
     mensaje: "Hola Ana, ¿cómo estás?",
-    fecha: new Date(),
-    avatar: "https://randomuser.me/api/portraits/men/44.jpg"
+    fecha: new Date()
   },
   {
     de: "Ana",
     para: "Pablo",
     mensaje: "¡Hola Pablo! Todo bien, ¿y tú?",
-    fecha: new Date(),
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg"
+    fecha: new Date()
   }
 ]);
 
@@ -125,16 +119,14 @@ appDB.notificaciones.insertMany([
     tipo: "like",
     mensaje: "Ana le dio like a tu publicación.",
     fecha: new Date(),
-    leido: false,
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg"
+    leido: false
   },
   {
     usuario: "Ana",
     tipo: "comentario",
     mensaje: "Pablo comentó en tu publicación.",
     fecha: new Date(),
-    leido: false,
-    avatar: "https://randomuser.me/api/portraits/men/44.jpg"
+    leido: false
   }
 ]);
 
@@ -143,13 +135,11 @@ appDB.perfiles.insertMany([
   {
     usuario: "Pablo",
     bio: "Desarrollador y amante de la tecnología.",
-    avatar: "https://randomuser.me/api/portraits/men/44.jpg",
     intereses: ["programación", "música"]
   },
   {
     usuario: "Ana",
     bio: "Apasionada por el arte y la fotografía.",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     intereses: ["arte", "fotografía"]
   }
 ]);

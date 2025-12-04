@@ -26,7 +26,7 @@ const Messages = () => {
         <div className="messages__list">
           {chats.map((chat, idx) => (
             <div key={idx} className="messages__chat">
-              <img src={chat.avatar} alt={chat.de} className="messages__avatar" />
+              {/* El avatar debe venir de la colección de usuarios, no de mensajes */}
               <div className="messages__info">
                 <div className="messages__user">{chat.de}</div>
                 <div className="messages__last">{chat.mensaje}</div>

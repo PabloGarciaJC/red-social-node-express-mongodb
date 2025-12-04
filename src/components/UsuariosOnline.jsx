@@ -25,7 +25,7 @@ const UsuariosOnline = () => {
           {usuarios.map((u, idx) => (
             <li key={idx} className="usuarios-online__item">
               <div className="usuarios-online__avatar-wrap">
-                <img src={u.avatar || 'https://randomuser.me/api/portraits/lego/1.jpg'} alt={u.nombre} className="usuarios-online__avatar" />
+                {/* El avatar debe venir de la colección de usuarios, no de usuarios conectados */}
                 <span className={`usuarios-online__status ${u.online ? 'online' : 'offline'}`}></span>
               </div>
               <span className="usuarios-online__nombre">{u.nombre}</span>

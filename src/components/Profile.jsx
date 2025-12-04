@@ -25,12 +25,11 @@ const Profile = () => {
         <div>Cargando perfil...</div>
       ) : profile ? (
         <div className="profile__card">
-          <img src={profile.avatar} alt={profile.usuario} className="profile__avatar" />
+          {/* El avatar debe venir de la colección de usuarios, no del perfil */}
           <div className="profile__info">
             <div className="profile__name">{profile.usuario}</div>
             <div className="profile__bio">{profile.bio}</div>
             <div className="profile__stats">
-              {/* Puedes agregar amigos y posts si tienes esos datos */}
               {profile.intereses && (
                 <span>Intereses: <span>{profile.intereses.join(', ')}</span></span>
               )}
