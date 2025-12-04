@@ -21,31 +21,35 @@ export default function App() {
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
+  const token = localStorage.getItem('token');
   return (
     <div className="app flex flex-col min-h-screen bg-gray-100">
       <Navbar />
-      <div className="app__content flex" style={{ display: "flex", flexDirection: "row" }}>
+      {token ? (
+        <div className="app__content flex" style={{ display: "flex", flexDirection: "row" }}>
+          <main className="main flex-1 p-6">
+            <Routes>
+              <Route path="/" element={<Navigate to="/feed" />} />
+              <Route path="/feed" element={<PrivateRoute><Feed /></PrivateRoute>} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/messages" element={<Messages />} />
+              <Route path="/friends" element={<Friends />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </main>
+          <UsuariosOnline />
+        </div>
+      ) : (
         <main className="main flex-1 p-6">
           <Routes>
             <Route path="/" element={<Register />} />
-            <Route
-              path="/feed"
-              element={
-                <PrivateRoute>
-                  <Feed />
-                </PrivateRoute>
-              }
-            />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/messages" element={<Messages />} />
-            <Route path="/friends" element={<Friends />} />
-            <Route path="/notifications" element={<Notifications />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>
         </main>
-        <UsuariosOnline />
-      </div>
+      )}
     </div>
   );
 }

@@ -260,7 +260,7 @@ const Feed = () => {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [localStorage.getItem('token')]);
 
   const handleCrear = async (e) => {
     e.preventDefault();
@@ -356,6 +356,11 @@ const Feed = () => {
                         <li key={cidx}>
                           <span className="feed__comment-content">
                             <span className="feed__comment-user">{comentario.usuario}:</span> {comentario.texto}
+                            {comentario.fecha && (
+                              <span className="feed__comment-date" style={{marginLeft:8, color:'#888', fontSize:'0.9em'}}>
+                                {new Date(comentario.fecha).toLocaleDateString('es-ES')}
+                              </span>
+                            )}
                           </span>
                           {comentario.usuario === (localStorage.getItem('nombre') || localStorage.getItem('usuario')) && (
                             <span>
