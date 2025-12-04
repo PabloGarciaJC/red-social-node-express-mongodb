@@ -1,3 +1,35 @@
+/* Mensaje de éxito en el feed */
+.feed__success {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: #78ffd6;
+  color: #155724;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(120,255,214,0.15);
+  border: 1px solid #78ffd6;
+  text-align: center;
+  position: relative;
+  width: -webkit-fill-available;
+}
+
+.feed__success-close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #155724;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.feed__success-close:hover {
+  color: #ff4d4f;
+}
 body {
   background-color: #f0f2f5;
   font-family: 'Inter', Arial, Helvetica, sans-serif;

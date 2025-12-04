@@ -44,6 +44,8 @@ app.get('/', (req, res) => {
 });
 
 
+
+// Obtener publicaciones
 app.get('/api/publicaciones', async (req, res) => {
   try {
     const publicaciones = await db.collection('publicaciones').find({}).toArray();
@@ -51,6 +53,29 @@ app.get('/api/publicaciones', async (req, res) => {
   } catch (err) {
     console.error("Error en /api/publicaciones:", err);
     res.status(500).json({ error: "Error al obtener publicaciones" });
+  }
+});
+
+// Crear publicación
+app.post('/api/publicaciones', async (req, res) => {
+  try {
+    const { contenido } = req.body;
+    if (!contenido || !contenido.trim()) {
+      return res.status(400).json({ error: 'El contenido es obligatorio.' });
+    }
+    // Puedes obtener el usuario desde el token si lo implementas
+    const nuevaPublicacion = {
+      usuario: 'Anonimo', // Cambia esto por el usuario real si tienes auth
+      contenido,
+      fecha: new Date(),
+      likes: [],
+      comentarios: []
+    };
+    const resultado = await db.collection('publicaciones').insertOne(nuevaPublicacion);
+    res.status(201).json({ ...nuevaPublicacion, _id: resultado.insertedId });
+  } catch (err) {
+    console.error('Error en /api/publicaciones (POST):', err);
+    res.status(500).json({ error: 'Error al crear publicación.' });
   }
 });
 

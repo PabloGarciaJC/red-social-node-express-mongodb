@@ -7,6 +7,7 @@ const Feed = () => {
   const [loading, setLoading] = useState(true);
   const [contenido, setContenido] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     fetch('http://localhost:3000/api/publicaciones')
@@ -21,6 +22,7 @@ const Feed = () => {
   const handleCrear = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     if (!contenido.trim()) {
       setError("El contenido no puede estar vacío.");
       return;
@@ -36,8 +38,12 @@ const Feed = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        setPosts([data, ...posts]);
         setContenido("");
+        setSuccess("¡Publicación creada!");
+        // Recargar publicaciones desde el backend
+        fetch('http://localhost:3000/api/publicaciones')
+          .then(res => res.json())
+          .then(data => setPosts(data));
       } else {
         setError(data.error || "Error al crear publicación");
       }
@@ -50,6 +56,18 @@ const Feed = () => {
     <div className="feed">
       <h2 className="feed__title">Publicaciones</h2>
       <form className="feed__form" onSubmit={handleCrear}>
+        {error && <div className="feed__error">{error}</div>}
+        {success && (
+          <div className="feed__success">
+            {success}
+            <button
+              className="feed__success-close"
+              type="button"
+              title="Cerrar"
+              onClick={() => setSuccess("")}
+            >×</button>
+          </div>
+        )}
         <textarea
           className="feed__form-textarea"
           value={contenido}
@@ -58,7 +76,6 @@ const Feed = () => {
           rows={3}
         />
         <button type="submit" className="feed__form-btn">Publicar</button>
-        {error && <div className="feed__error">{error}</div>}
       </form>
       {loading ? (
         <div>Cargando publicaciones...</div>
