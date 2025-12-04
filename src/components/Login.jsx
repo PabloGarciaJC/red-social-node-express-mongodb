@@ -27,6 +27,9 @@ const Login = () => {
         if (data.usuario && data.usuario.email) {
           localStorage.setItem('email', data.usuario.email);
         }
+        if (data.usuario && data.usuario.nombre) {
+          localStorage.setItem('nombre', data.usuario.nombre);
+        }
         // Redirigir al Feed tras login exitoso
         navigate('/feed');
       } else {

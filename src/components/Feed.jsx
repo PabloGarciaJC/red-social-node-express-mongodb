@@ -133,7 +133,7 @@ const Feed = () => {
           e.preventDefault();
           if (!commentContent.trim()) return;
           try {
-            const usuario = localStorage.getItem('usuario') || 'Anonimo';
+            const usuario = localStorage.getItem('nombre') || localStorage.getItem('usuario') || 'Anonimo';
             const res = await fetch(`http://localhost:3000/api/publicaciones/${postId}/comentarios`, {
               method: 'POST',
               headers: {
@@ -357,14 +357,16 @@ const Feed = () => {
                           <span className="feed__comment-content">
                             <span className="feed__comment-user">{comentario.usuario}:</span> {comentario.texto}
                           </span>
-                          <span>
-                            <button className="feed__comment-action-btn" title="Editar" style={{fontSize:'0.95em'}} onClick={() => handleEditCommentClick(post._id, cidx, comentario.texto)}>
-                              <FaEdit />
-                            </button>
-                            <button className="feed__comment-action-btn feed__action-icon--delete" title="Eliminar" style={{fontSize:'0.95em'}} onClick={() => handleDeleteCommentClick(post._id, cidx)}>
-                              <FaTrash />
-                            </button>
-                          </span>
+                          {comentario.usuario === (localStorage.getItem('nombre') || localStorage.getItem('usuario')) && (
+                            <span>
+                              <button className="feed__comment-action-btn" title="Editar" style={{fontSize:'0.95em'}} onClick={() => handleEditCommentClick(post._id, cidx, comentario.texto)}>
+                                <FaEdit />
+                              </button>
+                              <button className="feed__comment-action-btn feed__action-icon--delete" title="Eliminar" style={{fontSize:'0.95em'}} onClick={() => handleDeleteCommentClick(post._id, cidx)}>
+                                <FaTrash />
+                              </button>
+                            </span>
+                          )}
                         </li>
                       ))}
                     </ul>
