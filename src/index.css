@@ -12,13 +12,14 @@ html {
 
 
 /* ====== LOGIN & REGISTER ====== */
-.login, .register {
+.login,
+.register {
   width: 500px;
   margin: 40px auto;
   padding: 32px 24px;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(24,119,242,0.08);
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
   border: 1px solid #e3e6ea;
   display: flex;
   flex-direction: column;
@@ -28,20 +29,26 @@ html {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.login__title, .register__title {
+
+.login__title,
+.register__title {
   font-size: 2rem;
   font-weight: 700;
   color: #1877f2;
   margin-bottom: 24px;
   text-align: center;
 }
-.login__form, .register__form {
+
+.login__form,
+.register__form {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
-.login__form input, .register__form input {
+
+.login__form input,
+.register__form input {
   padding: 12px 14px;
   border-radius: 8px;
   border: 1px solid #e3e6ea;
@@ -49,11 +56,15 @@ html {
   background: #f7faff;
   transition: border 0.2s;
 }
-.login__form input:focus, .register__form input:focus {
+
+.login__form input:focus,
+.register__form input:focus {
   border: 1.5px solid #1877f2;
   outline: none;
 }
-.login__form button, .register__form button {
+
+.login__form button,
+.register__form button {
   padding: 12px 0;
   border-radius: 8px;
   border: none;
@@ -64,11 +75,15 @@ html {
   cursor: pointer;
   transition: background 0.2s;
 }
-.login__form button:disabled, .register__form button:disabled {
+
+.login__form button:disabled,
+.register__form button:disabled {
   background: #b3cdfa;
   cursor: not-allowed;
 }
-.login__error, .register__error {
+
+.login__error,
+.register__error {
   color: #e53935;
   background: #ffeaea;
   border-radius: 6px;
@@ -77,6 +92,7 @@ html {
   font-size: 0.98rem;
   text-align: center;
 }
+
 .register__success {
   color: #22c55e;
   background: #eaffea;
@@ -86,11 +102,15 @@ html {
   font-size: 0.98rem;
   text-align: center;
 }
-.login__register-link, .register__back-link {
+
+.login__register-link,
+.register__back-link {
   margin-top: 18px;
   text-align: center;
 }
-.login__register-link button, .register__back-link button {
+
+.login__register-link button,
+.register__back-link button {
   background: none;
   color: #1877f2;
   border: none;
@@ -101,7 +121,9 @@ html {
   text-decoration: underline;
   transition: color 0.2s;
 }
-.login__register-link button:hover, .register__back-link button:hover {
+
+.login__register-link button:hover,
+.register__back-link button:hover {
   color: #1456b8;
 }
 
@@ -113,15 +135,17 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 16px rgba(24,119,242,0.08);
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
   border-bottom: 1px solid #e3e6ea;
 }
+
 .navbar-logo {
   font-size: 2rem;
   font-weight: 700;
   margin-left: 40px;
   letter-spacing: 1px;
 }
+
 .navbar-links {
   list-style: none;
   display: flex;
@@ -129,6 +153,7 @@ html {
   gap: 40px;
   margin-right: 40px;
 }
+
 .navbar-links li a {
   color: #fff;
   text-decoration: none;
@@ -138,10 +163,12 @@ html {
   padding: 4px 10px;
   border-radius: 6px;
 }
+
 .navbar-links li a:hover {
   background: #fff;
   color: #1877f2;
 }
+
 .navbar-logout {
   padding: 12px 24px;
   border-radius: 8px;
@@ -156,37 +183,38 @@ html {
 }
 
 .navbar-logout:hover {
-    background: #fff;
-    color: #1877f2;
+  background: #fff;
+  color: #1877f2;
 }
+
 /* ====== FEED ====== */
-.feed {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 24px;
-}
+.feed {}
+
 .feed__title {
   font-size: 2.2rem;
   font-weight: 700;
-  margin-bottom: 28px;
+  margin: 0px 0px 20px 0px;
   color: #222;
   letter-spacing: 0.5px;
 }
+
 .feed__list {
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
+
 .feed__post {
   display: flex;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(24,119,242,0.08);
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
   padding: 20px;
   gap: 20px;
   align-items: flex-start;
   border: 1px solid #e3e6ea;
 }
+
 .feed__avatar {
   width: 60px;
   height: 60px;
@@ -194,19 +222,120 @@ html {
   object-fit: cover;
   border: 2px solid #1877f2;
 }
+
 .feed__user {
   font-weight: 600;
   color: #1877f2;
   font-size: 1.1rem;
 }
+
 .feed__content {
   color: #222;
   margin-bottom: 10px;
   font-size: 1rem;
 }
+
 .feed__time {
   font-size: 0.9rem;
   color: #888;
+}
+
+.feed__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.feed__edit-btn {
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #f7faff 80%, #e3e6ea 100%);
+  color: #1456b8;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: 1.5px solid #e3e6ea;
+}
+
+.feed__edit-btn:hover {
+  background: #e3e6ea;
+}
+
+.feed__delete-btn {
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #e53935 80%, #b71c1c 100%);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.feed__delete-btn:hover {
+  background: #b71c1c;
+}
+
+.feed__form {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
+  border: 1.5px solid #e3e6ea;
+  padding: 28px 22px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.feed__form-textarea {
+  width: 96%;
+  min-height: 80px;
+  max-height: 180px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1.5px solid #e3e6ea;
+  font-size: 1.08rem;
+  background: #f7faff;
+  resize: vertical;
+  margin-bottom: 8px;
+  transition: border 0.2s;
+}
+
+.feed__form-textarea:focus {
+  border: 1.5px solid #1877f2;
+  outline: none;
+}
+
+.feed__form-btn {
+  padding: 12px 32px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg, #1877f2 80%, #1456b8 100%);
+  color: #fff;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(24, 119, 242, 0.08);
+}
+
+.feed__form-btn:hover {
+  background: #1456b8;
+}
+
+.feed__error {
+  color: #e53935;
+  background: #ffeaea;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.98rem;
+  text-align: right;
+  margin-top: -8px;
 }
 
 /* ====== PROFILE ====== */
@@ -215,10 +344,11 @@ html {
   margin: 40px auto;
   padding: 24px;
 }
+
 .profile__card {
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(24,119,242,0.08);
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
   padding: 40px 24px;
   display: flex;
   flex-direction: column;
@@ -226,14 +356,16 @@ html {
   gap: 20px;
   border: 1px solid #e3e6ea;
 }
+
 .profile__avatar {
   width: 90px;
   height: 90px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #1877f2;
-  box-shadow: 0 2px 8px rgba(24,119,242,0.10);
+  box-shadow: 0 2px 8px rgba(24, 119, 242, 0.10);
 }
+
 .profile__name {
   font-weight: 700;
   color: #1877f2;
@@ -241,12 +373,14 @@ html {
   text-align: center;
   margin-bottom: 4px;
 }
+
 .profile__bio {
   color: #222;
   margin-bottom: 10px;
   text-align: center;
   font-size: 1rem;
 }
+
 .profile__stats {
   display: flex;
   gap: 40px;
@@ -254,6 +388,7 @@ html {
   color: #555;
   font-size: 1.05rem;
 }
+
 .profile__stats span {
   font-weight: 700;
   color: #1877f2;
@@ -265,27 +400,31 @@ html {
   margin: 40px auto;
   padding: 24px;
 }
+
 .friends__title {
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 28px;
   color: #222;
 }
+
 .friends__list {
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
+
 .friends__item {
   display: flex;
   align-items: center;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(24,119,242,0.08);
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
   padding: 20px;
   gap: 20px;
   border: 1px solid #e3e6ea;
 }
+
 .friends__avatar {
   width: 60px;
   height: 60px;
@@ -293,18 +432,22 @@ html {
   object-fit: cover;
   border: 2px solid #1877f2;
 }
+
 .friends__name {
   font-weight: 600;
   color: #1877f2;
   font-size: 1.1rem;
 }
+
 .friends__status {
   font-size: 1rem;
   font-weight: 600;
 }
+
 .friends__status--online {
   color: #22c55e;
 }
+
 .friends__status--offline {
   color: #888;
 }
@@ -315,27 +458,31 @@ html {
   margin: 40px auto;
   padding: 24px;
 }
+
 .messages__title {
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 28px;
   color: #222;
 }
+
 .messages__list {
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
+
 .messages__chat {
   display: flex;
   align-items: center;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(24,119,242,0.08);
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
   padding: 20px;
   gap: 20px;
   border: 1px solid #e3e6ea;
 }
+
 .messages__avatar {
   width: 60px;
   height: 60px;
@@ -343,16 +490,19 @@ html {
   object-fit: cover;
   border: 2px solid #1877f2;
 }
+
 .messages__user {
   font-weight: 600;
   color: #1877f2;
   font-size: 1.1rem;
 }
+
 .messages__last {
   color: #222;
   margin-bottom: 10px;
   font-size: 1rem;
 }
+
 .messages__time {
   font-size: 0.9rem;
   color: #888;
@@ -364,31 +514,143 @@ html {
   margin: 40px auto;
   padding: 24px;
 }
+
 .notifications__title {
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 28px;
   color: #222;
 }
+
 .notifications__list {
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
+
 .notifications__item {
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(24,119,242,0.08);
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
   padding: 20px;
   border: 1px solid #e3e6ea;
 }
+
 .notifications__text {
   font-weight: 600;
   color: #1877f2;
   font-size: 1.05rem;
 }
+
 .notifications__time {
   font-size: 0.9rem;
   color: #888;
   margin-top: 6px;
+}
+
+/* ====== USUARIOS ONLINE ====== */
+.usuarios-online {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.08);
+  border: 1.5px solid #e3e6ea;
+  padding: 0px 22px;
+  margin-right: 0;
+  height: fit-content;
+  position: sticky;
+  top: 32px;
+}
+
+.usuarios-online__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1877f2;
+  margin-bottom: 22px;
+  text-align: left;
+  letter-spacing: 0.5px;
+}
+
+.usuarios-online__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.usuarios-online__item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 22px;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e3e6ea;
+}
+
+.usuarios-online__item:last-child {
+  border-bottom: none;
+}
+
+.usuarios-online__avatar-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+
+.usuarios-online__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid #1877f2;
+  box-shadow: 0 2px 8px rgba(24, 119, 242, 0.08);
+}
+
+.usuarios-online__status {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(24, 119, 242, 0.10);
+}
+
+.usuarios-online__status.online {
+  background: #22c55e;
+}
+
+.usuarios-online__status.offline {
+  background: #bdbdbd;
+}
+
+.usuarios-online__nombre {
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: #222;
+  letter-spacing: 0.2px;
+}
+
+/* ====== APP CONTENT ====== */
+.app__content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  width: 100%;
+  max-width: 1300px;
+  margin: 40px auto 0 auto;
+  background: #f7faff;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(24, 119, 242, 0.07);
+  padding: 32px 24px;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.usuarios-online {
+  align-self: flex-start;
 }
