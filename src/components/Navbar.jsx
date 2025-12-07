@@ -21,9 +21,9 @@ const Navbar = () => {
       <ul className="navbar-links">
         <li><Link to="/feed">Feed</Link></li>
         <li><Link to="/profile">Perfil</Link></li>
-        <li><Link to="/messages">Mensajes</Link></li>
+        {/* <li><Link to="/messages">Mensajes</Link></li>
         <li><Link to="/friends">Amigos</Link></li>
-        <li><Link to="/notifications">Notificaciones</Link></li>
+        <li><Link to="/notifications">Notificaciones</Link></li> */}
         {token && (
           <li>
             <button onClick={handleLogout} className="navbar-logout">
