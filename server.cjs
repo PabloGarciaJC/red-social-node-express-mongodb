@@ -1,3 +1,16 @@
+// Configuración de multer para subir imágenes
+const multer = require('multer');
+const path = require('path');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, 'public'));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage });
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
@@ -180,20 +193,20 @@ app.delete('/api/publicaciones/:id', async (req, res) => {
 });
 
 // Editar publicación
-app.put('/api/publicaciones/:id', async (req, res) => {
+app.put('/api/publicaciones/:id', upload.single('imagen'), async (req, res) => {
   try {
     const { id } = req.params;
     const { contenido } = req.body;
-
     if (!contenido?.trim()) return res.status(400).json({ error: 'El contenido es obligatorio.' });
-
+    let updateFields = { contenido };
+    if (req.file) {
+      updateFields.imagen = '/' + req.file.filename;
+    }
     const resultado = await db.collection('publicaciones').updateOne(
       { _id: new ObjectId(id) },
-      { $set: { contenido } }
+      { $set: updateFields }
     );
-
     if (!resultado.matchedCount) return res.status(404).json({ error: 'Publicación no encontrada.' });
-
     res.json({ mensaje: 'Publicación actualizada correctamente.' });
   } catch (err) {
     res.status(500).json({ error: 'Error al editar publicación.' });
@@ -201,14 +214,11 @@ app.put('/api/publicaciones/:id', async (req, res) => {
 });
 
 // Crear publicación
-app.post('/api/publicaciones', async (req, res) => {
+app.post('/api/publicaciones', upload.single('imagen'), async (req, res) => {
   try {
     const { contenido } = req.body;
-
     if (!contenido?.trim()) return res.status(400).json({ error: 'El contenido es obligatorio.' });
-
     let usuario = 'Anonimo';
-
     const authHeader = req.headers['authorization'];
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
@@ -218,15 +228,18 @@ app.post('/api/publicaciones', async (req, res) => {
         if (userDb) usuario = userDb.nombre;
       } catch {}
     }
-
+    let imagenUrl = null;
+    if (req.file) {
+      imagenUrl = '/'+req.file.filename;
+    }
     const nuevaPublicacion = {
       usuario,
       contenido,
       fecha: new Date(),
       likes: 0,
-      comentarios: []
+      comentarios: [],
+      imagen: imagenUrl
     };
-
     const resultado = await db.collection('publicaciones').insertOne(nuevaPublicacion);
     res.status(201).json({ ...nuevaPublicacion, _id: resultado.insertedId });
   } catch (err) {

@@ -202,6 +202,8 @@ const Feed = () => {
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editPost, setEditPost] = useState(null);
     const [editContenido, setEditContenido] = useState("");
+    const [editImagen, setEditImagen] = useState(null);
+    const [editPreview, setEditPreview] = useState(null);
 
     // Abrir modal de edición
     const handleEditClick = (post) => {
@@ -217,19 +219,25 @@ const Feed = () => {
         return;
       }
       try {
+        const formData = new FormData();
+        formData.append('contenido', editContenido);
+        if (editImagen) {
+          formData.append('imagen', editImagen);
+        }
         const res = await fetch(`http://localhost:3000/api/publicaciones/${editPost._id}`, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           },
-          body: JSON.stringify({ contenido: editContenido })
+          body: formData
         });
         const data = await res.json();
         if (res.ok) {
           setEditModalOpen(false);
           setEditPost(null);
           setEditContenido("");
+          setEditImagen(null);
+          setEditPreview(null);
           setSuccess("¡Publicación editada!");
           // Recargar publicaciones
           fetch('http://localhost:3000/api/publicaciones')
@@ -251,6 +259,8 @@ const Feed = () => {
   const [contenido, setContenido] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [preview, setPreview] = useState(null);
+  const [imagen, setImagen] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -275,18 +285,25 @@ const Feed = () => {
     }
     try {
       const usuario = localStorage.getItem('usuario');
+      const formData = new FormData();
+      formData.append('contenido', contenido);
+      formData.append('usuario', usuario);
+      if (imagen) {
+        formData.append('imagen', imagen);
+      }
       const res = await fetch('http://localhost:3000/api/publicaciones', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ contenido, usuario })
+        body: formData
       });
       const data = await res.json();
       if (res.ok) {
         setContenido("");
         setSuccess("¡Publicación creada!");
+        setPreview(null); // Limpiar miniatura
+        setImagen(null);  // Limpiar imagen
         fetch('http://localhost:3000/api/publicaciones')
           .then(res => res.json())
           .then(pubs => {
@@ -324,7 +341,36 @@ const Feed = () => {
           placeholder="¿Qué quieres compartir?"
           rows={3}
         />
-        <button type="submit" className="feed__form-btn">Publicar</button>
+        <input
+          type="file"
+          accept="image/*"
+          id="feed-image-input"
+          style={{display:'none'}}
+          onChange={e => {
+            const file = e.target.files[0];
+            setImagen(file);
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = ev => setPreview(ev.target.result);
+              reader.readAsDataURL(file);
+            } else {
+              setPreview(null);
+            }
+          }}
+        />
+          <div style={{display:'flex', gap:12, alignItems:'center', marginTop:10, marginBottom:10}}>
+            <button
+              type="button"
+              className="feed__form-image"
+              onClick={() => document.getElementById('feed-image-input').click()}
+            >Seleccionar imagen</button>
+            <button type="submit" className="feed__form-btn">Publicar</button>
+          </div>
+              {preview && (
+                <div style={{marginTop:10,marginBottom:10}}>
+                  <img src={preview} alt="Miniatura" style={{maxWidth:120,maxHeight:120,borderRadius:8,boxShadow:'0 2px 8px rgba(0,0,0,0.12)'}} />
+                </div>
+              )}
       </form>
       {loading ? (
         <div>Cargando publicaciones...</div>
@@ -360,6 +406,11 @@ const Feed = () => {
                   {post.usuario}
                 </div>
                 <div className="feed__content">{post.contenido}</div>
+                                {post.imagen && (
+                                  <div className="feed__image" style={{margin:'12px 0'}}>
+                                    <img src={post.imagen.startsWith('/') ? post.imagen : `/${post.imagen}`} alt="Imagen publicación" style={{maxWidth:'100%',maxHeight:320,borderRadius:12,boxShadow:'0 2px 8px rgba(0,0,0,0.10)'}} />
+                                  </div>
+                                )}
                 <div className="feed__time">{post.fecha ? new Date(post.fecha).toLocaleString() : ''}</div>
                 {/* Mostrar likes como número */}
                 {typeof post.likes === 'number' ? (
@@ -488,6 +539,42 @@ const Feed = () => {
                   onChange={e => setEditContenido(e.target.value)}
                   rows={3}
                 />
+                {/* Input para nueva imagen */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="edit-image-input"
+                  style={{display:'none'}}
+                  onChange={e => {
+                    const file = e.target.files[0];
+                    setEditImagen(file);
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = ev => setEditPreview(ev.target.result);
+                      reader.readAsDataURL(file);
+                    } else {
+                      setEditPreview(null);
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  className="feed__form-image"
+                  style={{marginBottom:10}}
+                  onClick={() => document.getElementById('edit-image-input').click()}
+                >Seleccionar nueva imagen</button>
+                {/* Mostrar solo la miniatura nueva si existe, si no la imagen actual */}
+                {editPreview ? (
+                  <div style={{marginBottom:10}}>
+                    <img src={editPreview} alt="Miniatura nueva" style={{maxWidth:120,maxHeight:120,borderRadius:8,boxShadow:'0 2px 8px rgba(0,0,0,0.12)'}} />
+                  </div>
+                ) : (
+                  editPost && editPost.imagen && (
+                    <div style={{margin:'12px 0'}}>
+                      <img src={editPost.imagen.startsWith('/') ? editPost.imagen : `/${editPost.imagen}`} alt="Imagen actual" style={{maxWidth:'100%',maxHeight:180,borderRadius:8}} />
+                    </div>
+                  )
+                )}
                 <div className="feed__modal-actions">
                   <button className="feed__form-btn" onClick={handleEditSave}>Guardar</button>
                   <button className="feed__form-btn" onClick={() => setEditModalOpen(false)}>Cancelar</button>

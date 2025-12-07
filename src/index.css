@@ -1,3 +1,21 @@
+/* ====== BOTÓN IMAGEN PUBLICACIÓN ====== */
+.feed__form-image {
+  display: inline-block;
+  padding: 10px 18px;
+  background: #1877f2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(24,119,242,0.08);
+  transition: background 0.2s, color 0.2s;
+}
+.feed__form-image:hover {
+  background: #1456b8;
+  color: #e3e6ea;
+}
 /* ====== BOTÓN CERRAR MENSAJE PERFIL ====== */
 .profile__msg-close {
   position: absolute;
