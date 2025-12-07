@@ -13,15 +13,44 @@ const Profile = () => {
     fetch('http://localhost:3000/api/profile')
       .then(res => res.json())
       .then(data => {
-        // Filtrar por usuario si viene en la ruta
         if (usuario) {
           const normalizar = s => s && s.trim().toLowerCase().replace(/\s+/g, '');
-          const found = data.find(p => normalizar(p.usuario) === normalizar(usuario));
-          setProfile(found || null);
+          let found = data.find(p => normalizar(p.usuario) === normalizar(usuario));
+          if (!found) {
+            found = data.find(p => normalizar(p.usuario).includes(normalizar(usuario)) || normalizar(usuario).includes(normalizar(p.usuario)));
+          }
+          if (found) {
+            setProfile(found);
+            setLoading(false);
+          } else {
+            // Si no se encuentra en perfiles, buscar en usuarios
+            fetch('http://localhost:3000/api/usuarios')
+              .then(res2 => res2.json())
+              .then(users => {
+                let userFound = users.find(u => normalizar(u.nombre) === normalizar(usuario));
+                if (!userFound) {
+                  userFound = users.find(u => normalizar(u.nombre).includes(normalizar(usuario)) || normalizar(usuario).includes(normalizar(u.nombre)));
+                }
+                if (userFound) {
+                  setProfile({
+                    usuario: userFound.nombre,
+                    bio: userFound.bio || '',
+                    intereses: userFound.intereses || []
+                  });
+                } else {
+                  setProfile(null);
+                }
+                setLoading(false);
+              })
+              .catch(() => {
+                setProfile(null);
+                setLoading(false);
+              });
+          }
         } else {
           setProfile(data[0]);
+          setLoading(false);
         }
-        setLoading(false);
       })
       .catch(() => setLoading(false));
   }, [usuario]);
