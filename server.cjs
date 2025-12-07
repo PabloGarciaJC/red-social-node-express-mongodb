@@ -326,6 +326,13 @@ app.post('/api/register', async (req, res) => {
       fechaRegistro: new Date()
     };
     await db.collection('usuarios').insertOne(nuevoUsuario);
+    // Crear perfil básico asociado
+    await db.collection('perfiles').insertOne({
+      usuario: nombre,
+      email,
+      bio: '',
+      intereses: []
+    });
     res.status(201).json({ mensaje: 'Usuario registrado correctamente.' });
   } catch (err) {
     console.error('Error en /api/register:', err);
