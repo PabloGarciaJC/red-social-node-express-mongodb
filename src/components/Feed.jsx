@@ -1,10 +1,11 @@
 import '../index.css';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { FaHeart } from 'react-icons/fa';
 
 const Feed = () => {
+              const navigate = useNavigate();
             const [likedPosts, setLikedPosts] = useState([]);
 
             const handleLikeClick = async (postId) => {
@@ -332,7 +333,7 @@ const Feed = () => {
           {posts.map((post, idx) => (
             <div key={idx} className="feed__post">
               <div className="feed__info">
-                <div className="feed__user">
+                <div className="feed__user" style={{cursor:'pointer'}} onClick={() => navigate(`/profile/${encodeURIComponent(post.usuario)}`)}>
                   <span
                     className="feed__avatar"
                     style={{
@@ -448,12 +449,14 @@ const Feed = () => {
                 </form>
               </div>
               <div className="feed__actions">
-                <span className="feed__action-icon" title="Editar" onClick={() => handleEditClick(post)} style={{ cursor: 'pointer' }}>
-                  <FaEdit />
-                </span>
-                <span className="feed__action-icon feed__action-icon--delete" title="Eliminar" onClick={() => handleDeleteClick(post)} style={{ cursor: 'pointer' }}>
-                  <FaTrash />
-                </span>
+                {(post.usuario === (localStorage.getItem('nombre') || localStorage.getItem('usuario'))) && (
+                  <>
+                    <span className="feed__action-icon" title="Editar" onClick={() => handleEditClick(post)} style={{ cursor: 'pointer' }}>
+                      <FaEdit />
+                    </span>
+                    <span className="feed__action-icon feed__action-icon--delete" title="Eliminar" onClick={() => handleDeleteClick(post)} style={{ cursor: 'pointer' }}>
+                      <FaTrash />
+                    </span>
                     {/* Modal de confirmación para eliminar publicación */}
                     {deleteModalOpen && (
                       <div className="feed__modal-overlay">
@@ -468,6 +471,8 @@ const Feed = () => {
                         </div>
                       </div>
                     )}
+                  </>
+                )}
               </div>
             </div>
           ))}

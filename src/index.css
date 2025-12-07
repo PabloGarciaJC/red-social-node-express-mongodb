@@ -715,6 +715,9 @@ html {
   position: relative;
   width: 44px;
   height: 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
 }
 
 .usuarios-online__avatar {
@@ -723,13 +726,23 @@ html {
   border-radius: 50%;
   object-fit: cover;
   border: 2.5px solid #1877f2;
-  box-shadow: 0 2px 8px rgba(24, 119, 242, 0.08);
+  background: #cccccc;
+  color: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1em;
+  margin-right: 6px;
+  border: 1px solid #eee;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .usuarios-online__status {
   position: absolute;
-  bottom: 2px;
-  right: 2px;
+  bottom: -5px;
+  right: -5px;
   width: 14px;
   height: 14px;
   border-radius: 50%;

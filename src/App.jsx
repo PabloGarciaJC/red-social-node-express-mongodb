@@ -50,6 +50,7 @@ export default function App() {
               <Route path="/" element={<Navigate to="/feed" />} />
               <Route path="/feed" element={<PrivateRoute><Feed /></PrivateRoute>} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/:usuario" element={<Profile />} />
               <Route path="/messages" element={<Messages />} />
               <Route path="/friends" element={<Friends />} />
               <Route path="/notifications" element={<Notifications />} />
