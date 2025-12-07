@@ -53,7 +53,7 @@ const Navbar = ({ onToggleUsuariosOnline }) => {
 
       <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
         <li><Link to="/feed">Feed</Link></li>
-        <li><Link to="/profile">Perfil</Link></li>
+          <li><Link to={`/profile/${encodeURIComponent(localStorage.getItem('nombre') || '')}`}>Perfil</Link></li>
         {/* <li><Link to="/messages">Mensajes</Link></li>
         <li><Link to="/friends">Amigos</Link></li>
         <li><Link to="/notifications">Notificaciones</Link></li> */}
