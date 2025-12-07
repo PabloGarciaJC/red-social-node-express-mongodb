@@ -431,9 +431,6 @@ html {
   margin: 0 auto;
 }
 
-
-
-
 .feed__like-btn {
   background: none;
   border: none;
@@ -1088,4 +1085,88 @@ html {
   color: #1877f2;
   background: none;
   border: none;
+}
+
+
+/* ====== RESPONSIVE ====== */
+
+/* Móviles pequeños y smartphones (≤ 480px) */
+
+
+/* Tabletas (481px – 768px) */
+
+
+/* Pantallas medianas y grandes (769px – 1024px) */
+
+
+
+/* Botón hamburguesa */
+.navbar-hamburger {
+  display: none;
+  /* solo visible en móvil/tablet */
+  background: #1877f2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+
+  margin-right: 16px;
+}
+
+.navbar-hamburger:hover {
+  background: #1456b8;
+  transform: scale(1.05);
+}
+
+
+
+@media only screen and (min-width: 768px) and (max-width: 991px),
+screen and (max-width: 767px) {
+
+  .navbar {
+    padding: 20px;
+  }
+
+  .navbar-logo {
+    margin-left: 0px;
+  }
+
+  .feed__image {
+    height: 400px;
+  }
+
+  .navbar-hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feed__image-img {
+    height: 100%;
+  }
+
+  .feed {
+    padding: 15px;
+  }
+
+  .navbar-links {
+    display: none;
+  }
+
+  .usuarios-online {
+    display: none;
+  }
+
+  .app__content {
+    width: -webkit-fill-available;
+    padding: 0px;
+  }
+
+  .feed__title {
+    margin-bottom: 0px;
+  }
 }

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../index.css';
 
-const Navbar = () => {
+const Navbar = ({ onToggleUsuariosOnline }) => {
   const token = localStorage.getItem('token');
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/login';
@@ -15,10 +17,25 @@ const Navbar = () => {
     return null;
   }
 
+  const handleHamburgerClick = () => {
+    if (onToggleUsuariosOnline) onToggleUsuariosOnline();
+    setMenuOpen(!menuOpen);
+  };
+
   return (
     <nav className="navbar">
       <Link to="/feed" className="navbar-logo">RedSocial</Link>
-      <ul className="navbar-links">
+
+      {/* Botón hamburguesa para móviles */}
+      <button 
+        className="navbar-hamburger" 
+        onClick={handleHamburgerClick}
+        aria-label="Toggle usuarios online"
+      >
+        ☰
+      </button>
+
+      <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
         <li><Link to="/feed">Feed</Link></li>
         <li><Link to="/profile">Perfil</Link></li>
         {/* <li><Link to="/messages">Mensajes</Link></li>

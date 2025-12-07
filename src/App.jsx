@@ -46,7 +46,7 @@ export default function App() {
     <div className="app flex flex-col min-h-screen bg-gray-100">
       <Navbar />
       {token ? (
-        <div className="app__content flex" style={{ display: "flex", flexDirection: "row" }}>
+        <div className="app__content" >
           <main className="main flex-1 p-6">
             <Routes>
               <Route path="/" element={<Navigate to="/feed" />} />
