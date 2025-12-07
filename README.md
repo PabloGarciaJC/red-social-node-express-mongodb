@@ -5,7 +5,7 @@ Este proyecto es una red social construida con Node.js, Express, MongoDB y React
 
 ## Imagenes del Proyecto
 
-| ![Imagen 1](https://pablogarciajc.com/wp-content/uploads/2025/09/ecommerce_11_11.webp) | ![Imagen 2](https://pablogarciajc.com/wp-content/uploads/2025/01/ecommerce_6_webp.png) |
+| ![Imagen 1](https://pablogarciajc.com/wp-content/uploads/2025/12/red_social_1.webp) | ![Imagen 2](https://pablogarciajc.com/wp-content/uploads/2025/12/red_social_2.webp) |
 |-----------|-----------|
 
 ## Tecnologías principales
