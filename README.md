@@ -1,34 +1,29 @@
-# Roadmap (React + Vite)
 
-Este proyecto es tu primer acercamiento práctico a **React** usando **Vite**. Está pensado como una guía educativa y de práctica para aprender conceptos esenciales de React mientras construyes un proyecto funcional.
+# Red Social (Node + Express + MongoDB + React)
 
----
+Este proyecto es una red social construida con Node.js, Express, MongoDB y React, integrando los módulos y librerías más utilizados en el desarrollo web actual.
 
-## Demo del Proyecto
+## Imagenes del Proyecto
 
-[https://roadmap-vite-react.com/](https://roadmap-vite-react.pablogarciajc.com/)
-
-| ![Imagen 1](https://pablogarciajc.com/wp-content/uploads/2025/10/roadmap-vite-react-1.webp) | ![Imagen 2](https://pablogarciajc.com/wp-content/uploads/2025/10/roadmap-vite-react-2.webp) |
+| ![Imagen 1](https://pablogarciajc.com/wp-content/uploads/2025/09/ecommerce_11_11.webp) | ![Imagen 2](https://pablogarciajc.com/wp-content/uploads/2025/01/ecommerce_6_webp.png) |
 |-----------|-----------|
 
-## Áreas de Estudio
+## Tecnologías principales
 
-Este proyecto es tu primer acercamiento práctico a **React** usando **Vite**, diseñado para aprender conceptos esenciales mientras construyes un proyecto funcional:
+- **Node.js**
+- **Express.js**
+- **React** (con Vite)
+- **MongoDB** (base de datos principal)
+- **Docker** y **Docker Compose** (para desarrollo y despliegue)
 
-- **Introducción a Vite con React**: Instalación y configuración de Vite, diferencias con Create React App, estructura del proyecto y desarrollo rápido.
-- **Componentes**: Base de React; componentes funcionales, composición, importación y exportación.
-- **JSX**: Sintaxis similar a HTML, expresiones, condicionales, loops y buenas prácticas de legibilidad.
-- **Props**: Pasar información a componentes, props por defecto, validación y comunicación entre componentes padre e hijo.
-- **useState**: Manejo del estado local, actualización de estado, objetos y arrays, y patrones para múltiples estados.
-- **useEffect**: Efectos secundarios, fetch de datos, timers, dependencias y limpieza de efectos.
-- **useContext**: Manejo de estado global, creación y consumo de contextos, y evitar prop drilling.
-- **useCallback**: Optimización de funciones pasadas como props y evitar recreación innecesaria de funciones.
-- **useMemo**: Memorizar cálculos costosos y evitar renders innecesarios de componentes.
-- **Manejo de eventos**: Eventos en JSX, objeto event, prevención de comportamiento por defecto y buenas prácticas.
-- **Renderizado de listas**: Map, claves (`key`), listas anidadas, componentes reutilizables, filtrado y ordenamiento.
-- **React Router**: Configuración de rutas, rutas dinámicas, navegación programática y rutas anidadas.
-- **Formularios**: Inputs controlados y no controlados, validación de datos, manejo de errores y librerías externas opcionales.
-- **Optimización avanzada**: Memoización de componentes, lazy loading, división de código y análisis de performance.
+## Módulos y librerías destacadas
+
+- **Mongoose** (ODM para MongoDB)
+- **Multer** (subida de imágenes)
+- **bcrypt** (hash de contraseñas)
+- **jsonwebtoken** (autenticación JWT)
+- **React Router** (navegación en frontend)
+- **Vite** (entorno de desarrollo rápido para React)
 
 ## Instalación
 
@@ -43,18 +38,16 @@ Este proyecto es tu primer acercamiento práctico a **React** usando **Vite**, d
 2. Dentro del repositorio, encontrarás un archivo **Makefile** que contiene los comandos necesarios para iniciar y gestionar tu aplicación.
 3. Usa los siguientes comandos de **Make** para interactuar con la aplicación:
 
-    - **`make init-app`**: Inicializa la aplicación, copiando `.env`, creando symlinks, levantando contenedores, instalando dependencias y levantando el servidor de desarrollo.  
-    - **`make up`**: Levanta los contenedores asociados a la aplicación en segundo plano.  
-    - **`make down`**: Detiene los contenedores y apaga la aplicación.  
-    - **`make shell`**: Ingresa al contenedor para interactuar directamente con el sistema.  
-    - **`make npm-install`**: Instala todas las dependencias definidas en `package.json`.  
-    - **`make npm-host`**: Levanta el servidor de desarrollo (`npm run dev`) accesible desde tu máquina local.  
-    - **`make build-prod`**: Genera la versión de producción de la aplicación (`npm run build`) y mueve los archivos compilados a la raíz del proyecto.  
+   - **`make init-app`**: Inicializa los contenedores y configura la aplicación.
+   - **`make up`**: Levanta la aplicación y sus contenedores asociados.
+   - **`make down`**: Detiene los contenedores y apaga la aplicación.
+   - **`make shell`**: Ingresa al contenedor para interactuar directamente con el sistema en su entorno de ejecución.
 
 4. Además de estos comandos, dentro del archivo **Makefile** puedes encontrar otros comandos que te permitirán interactuar de manera más específica con los contenedores y los diferentes servicios que conforman la aplicación.
 
 5. Accede a los siguientes URL:
-   - **Aplicación Web**: [http://localhost:5173](http://localhost:5173)
+   - **Aplicación Web**: [http://localhost:5173/](http://localhost:5173/)
+   - **Mongo Express**: [http://localhost:8082/](http://localhost:8082/)
 
 ---
 
@@ -70,4 +63,4 @@ Este proyecto es tu primer acercamiento práctico a **React** usando **Vite**, d
 | **Twitter**  | Proyectos, pensamientos y actualizaciones.                | [Presiona aquí](https://x.com/PabloGarciaJC?t=lct1gxvE8DkqAr8dgxrHIw&s=09)   |
 
 ---
-> _"La única forma de hacer un gran trabajo es amar lo que haces." - Steve Jobs_
+> _"El buen manejo de tus finanzas hoy construye la seguridad del mañana."_
