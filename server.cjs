@@ -285,24 +285,13 @@ app.get('/api/profile', async (req, res) => {
 app.put('/api/profile/:usuario', async (req, res) => {
   try {
     const usuarioActual = req.params.usuario;
-    const { usuario: nuevoUsuario, bio, intereses } = req.body;
+    const { bio, intereses } = req.body;
 
-    if (!usuarioActual || !nuevoUsuario) return res.status(400).json({ error: 'Usuario requerido' });
-
-    // Verificar si el nuevo nombre ya existe
-    if (usuarioActual !== nuevoUsuario) {
-      const existe = await db.collection('usuarios').findOne({ nombre: nuevoUsuario });
-      if (existe) return res.status(409).json({ error: 'El nombre de usuario ya está en uso' });
-    }
-
-    const result = await db.collection('usuarios').updateOne(
-      { nombre: usuarioActual },
-      { $set: { nombre: nuevoUsuario, bio, intereses } }
+    const result = await db.collection('perfiles').updateOne(
+      { usuario: usuarioActual },
+      { $set: { bio, intereses } },
+      { upsert: true } // crea perfil si no existe
     );
-
-    if (result.matchedCount === 0) {
-      return res.status(404).json({ error: 'Usuario no encontrado' });
-    }
 
     res.json({ mensaje: 'Perfil actualizado correctamente' });
   } catch (err) {
@@ -310,7 +299,6 @@ app.put('/api/profile/:usuario', async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar perfil' });
   }
 });
-
 
 
 // =========================
