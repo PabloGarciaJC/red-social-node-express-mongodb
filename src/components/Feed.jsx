@@ -328,9 +328,10 @@ const Feed = () => {
           </div>
         )}
         <textarea className="feed__form-textarea" value={contenido} onChange={e => setContenido(e.target.value)} placeholder="¿Qué quieres compartir?"rows={3}/>
+        {preview && (<div className="feed__preview"><img src={preview} alt="Miniatura" className="feed__preview-img" /></div>)}
         <input type="file" accept="image/*" id="feed-image-input" className="feed__input-file" onChange={e => { const file = e.target.files[0]; setImagen(file); if (file) { const reader = new FileReader(); reader.onload = ev => setPreview(ev.target.result); reader.readAsDataURL(file); } else { setPreview(null); } }} />
         <div className="feed__actions-row"><button type="button" className="feed__form-image" onClick={() => document.getElementById('feed-image-input').click()}>Seleccionar imagen</button><button type="submit" className="feed__form-btn">Publicar</button></div>
-        {preview && (<div className="feed__preview"><img src={preview} alt="Miniatura" className="feed__preview-img" /></div>)}
+       
       </form>
       {loading ? (
         <div>Cargando publicaciones...</div>
