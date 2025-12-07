@@ -360,7 +360,6 @@ html {
   font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
-  margin-left: 16px;
   transition: background 0.2s;
 }
 
@@ -370,8 +369,6 @@ html {
 }
 
 /* ====== FEED POSTS ====== */
-.feed {}
-
 .feed__title {
   font-size: 2.2rem;
   font-weight: 700;
@@ -1123,9 +1120,81 @@ html {
 }
 
 
+/* Panel lateral */
+/* Panel lateral */
+.side-panel {
+  position: fixed;
+  top: 0;
+  right: 0; /* lo dejamos al borde de la pantalla */
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  z-index: 1000;
+  padding: 20px;
+  transform: translateX(100%); /* completamente fuera de la pantalla */
+  transition: transform 0.3s ease;
+  display: none; /* desktop lo oculta */
+}
+
+.side-panel.open {
+  transform: translateX(0); /* se desliza a la vista */
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 900;
+  display: none;
+}
+
+.side-panel .close-btn {
+  font-size: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  float: right;
+}
+
+.side-panel .panel-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 50px;
+  padding: 40px;
+}
+
+.side-panel .panel-links li {
+  margin-bottom: 20px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 900;
+}
+
+
+
 
 @media only screen and (min-width: 768px) and (max-width: 991px),
 screen and (max-width: 767px) {
+
+  .side-panel {
+    display: block;
+  }
+
+  .overlay {
+    display: block;
+  }
 
   .navbar {
     padding: 20px;

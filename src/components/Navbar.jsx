@@ -35,6 +35,22 @@ const Navbar = ({ onToggleUsuariosOnline }) => {
         ☰
       </button>
 
+        {/* Panel deslizante */}
+      <div className={`side-panel ${menuOpen ? 'open' : ''}`}>
+        <button className="close-btn" onClick={() => setMenuOpen(false)}>×</button>
+        <ul className="panel-links">
+          <li><Link to="/feed" onClick={() => setMenuOpen(false)}>Feed</Link></li>
+          <li><Link to="/profile" onClick={() => setMenuOpen(false)}>Perfil</Link></li>
+          {token && (
+            <li>
+              <button onClick={handleLogout} className="navbar-logout">
+                Cerrar sesión
+              </button>
+            </li>
+          )}
+        </ul>
+      </div>
+
       <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
         <li><Link to="/feed">Feed</Link></li>
         <li><Link to="/profile">Perfil</Link></li>
