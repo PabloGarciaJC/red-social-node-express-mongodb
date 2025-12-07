@@ -29,6 +29,7 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [bio, setBio] = useState("");
   const [intereses, setIntereses] = useState("");
+  const [nombre, setNombre] = useState("");
   const [msg, setMsg] = useState("");
   const usuarioLog = localStorage.getItem('nombre') || localStorage.getItem('usuario');
 
@@ -36,6 +37,7 @@ const Profile = () => {
     if (profile) {
       setBio(profile.bio || "");
       setIntereses(profile.intereses ? profile.intereses.join(', ') : "");
+      setNombre(profile.usuario || "");
     }
   }, [profile]);
 
@@ -46,13 +48,17 @@ const Profile = () => {
       const res = await fetch(`http://localhost:3000/api/profile/${encodeURIComponent(profile.usuario)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bio, intereses: intereses.split(',').map(i => i.trim()).filter(Boolean) })
+        body: JSON.stringify({
+          usuario: nombre,
+          bio,
+          intereses: intereses.split(',').map(i => i.trim()).filter(Boolean)
+        })
       });
       const data = await res.json();
       if (res.ok) {
         setMsg('Perfil actualizado correctamente');
         setEditMode(false);
-        setProfile(p => ({ ...p, bio, intereses: intereses.split(',').map(i => i.trim()).filter(Boolean) }));
+        setProfile(p => ({ ...p, usuario: nombre, bio, intereses: intereses.split(',').map(i => i.trim()).filter(Boolean) }));
       } else {
         setMsg(data.error || 'Error al actualizar');
       }
@@ -73,6 +79,10 @@ const Profile = () => {
             {editMode ? (
               <form className="profile__form profile__form--edit" onSubmit={handleSave}>
                 <div className="profile__form-group">
+                  <label className="profile__label">Nombre de usuario:</label>
+                  <input className="profile__input" type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
+                </div>
+                <div className="profile__form-group">
                   <label className="profile__label">Bio:</label>
                   <textarea className="profile__textarea" value={bio} onChange={e => setBio(e.target.value)} rows={2} />
                 </div>
@@ -84,7 +94,15 @@ const Profile = () => {
                   <button className="profile__btn profile__btn--save" type="submit">Guardar</button>
                   <button className="profile__btn profile__btn--cancel" type="button" onClick={() => setEditMode(false)}>Cancelar</button>
                 </div>
-                {msg && <div className="profile__msg">{msg}</div>}
+                {msg && (
+                  <div className={
+                    msg.toLowerCase().includes('correctamente')
+                      ? 'profile__msg profile__msg--success'
+                      : 'profile__msg profile__msg--error'
+                  }>
+                    {msg}
+                  </div>
+                )}
               </form>
             ) : (
               <>

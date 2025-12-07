@@ -271,15 +271,20 @@ app.get('/api/notifications', async (req, res) => {
 });
 
 app.get('/api/profile', async (req, res) => {
-  // Editar perfil de usuario
+  // Editar perfil de usuario (permite cambiar nombre de usuario)
   app.put('/api/profile/:usuario', async (req, res) => {
     try {
-      const { usuario } = req.params;
-      const { bio, intereses } = req.body;
-      if (!usuario) return res.status(400).json({ error: 'Usuario requerido' });
+      const usuarioActual = req.params.usuario;
+      const { usuario: nuevoUsuario, bio, intereses } = req.body;
+      if (!usuarioActual || !nuevoUsuario) return res.status(400).json({ error: 'Usuario requerido' });
+      // Verificar si el nuevo nombre ya existe (y no es el mismo documento)
+      if (usuarioActual !== nuevoUsuario) {
+        const existe = await db.collection('perfiles').findOne({ usuario: nuevoUsuario });
+        if (existe) return res.status(409).json({ error: 'El nombre de usuario ya está en uso' });
+      }
       const result = await db.collection('perfiles').updateOne(
-        { usuario },
-        { $set: { bio, intereses } }
+        { usuario: usuarioActual },
+        { $set: { usuario: nuevoUsuario, bio, intereses } }
       );
       if (result.matchedCount === 0) {
         return res.status(404).json({ error: 'Perfil no encontrado' });
