@@ -80,7 +80,7 @@ const Profile = () => {
               <form className="profile__form profile__form--edit" onSubmit={handleSave}>
                 <div className="profile__form-group">
                   <label className="profile__label">Nombre de usuario:</label>
-                  <input className="profile__input" type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
+                  <input className="profile__input" type="text" value={nombre} onChange={e => setNombre(e.target.value)} readOnly />
                 </div>
                 <div className="profile__form-group">
                   <label className="profile__label">Bio:</label>
@@ -94,15 +94,6 @@ const Profile = () => {
                   <button className="profile__btn profile__btn--save" type="submit">Guardar</button>
                   <button className="profile__btn profile__btn--cancel" type="button" onClick={() => setEditMode(false)}>Cancelar</button>
                 </div>
-                {msg && (
-                  <div className={
-                    msg.toLowerCase().includes('correctamente')
-                      ? 'profile__msg profile__msg--success'
-                      : 'profile__msg profile__msg--error'
-                  }>
-                    {msg}
-                  </div>
-                )}
               </form>
             ) : (
               <>
@@ -118,9 +109,25 @@ const Profile = () => {
                 })() && (
                   <button className="profile__btn profile__btn--edit" onClick={() => setEditMode(true)}>Editar perfil</button>
                 )}
-                {msg && <div className="profile__msg">{msg}</div>}
               </>
             )}
+                {/* Mensaje de éxito/error solo fuera del form */}
+                {!editMode && msg && (
+                  <div className={
+                    msg.toLowerCase().includes('correctamente')
+                      ? 'profile__msg profile__msg--success'
+                      : 'profile__msg profile__msg--error'
+                  }>
+                    {msg}
+                    <button
+                      className="profile__msg-close"
+                      type="button"
+                      title="Cerrar"
+                      onClick={() => setMsg("")}
+                      style={{marginLeft:8,background:'none',border:'none',fontSize:'1.2em',cursor:'pointer'}}
+                    >×</button>
+                  </div>
+                )}
           </div>
         </div>
       ) : (

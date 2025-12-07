@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">RedSocial</div>
+      <Link to="/feed" className="navbar-logo">RedSocial</Link>
       <ul className="navbar-links">
         <li><Link to="/feed">Feed</Link></li>
         <li><Link to="/profile">Perfil</Link></li>
