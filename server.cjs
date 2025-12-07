@@ -17,8 +17,6 @@ const MONGO_URL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MON
 
 let db;
 
-// ...existing code...
-
 async function connectDB() {
   let connected = false;
 
@@ -36,8 +34,6 @@ async function connectDB() {
   }
 }
 
-
-
 app.use(cors());
 app.use(express.json());
 
@@ -46,13 +42,15 @@ app.get('/', (req, res) => {
 });
 
 
+// =========================
+//      PUBLICACIONES
+// =========================
 
-// Obtener publicaciones
-// Like/Unlike a publicación (toggle)
+// Like/Unlike
 app.post('/api/publicaciones/:id/like', async (req, res) => {
   try {
     const { id } = req.params;
-    // Obtener usuario desde el token JWT
+
     let usuario = 'Anonimo';
     const authHeader = req.headers['authorization'];
     if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -62,166 +60,163 @@ app.post('/api/publicaciones/:id/like', async (req, res) => {
         usuario = decoded.email || decoded.nombre || 'Anonimo';
       } catch {}
     }
+
     const pub = await db.collection('publicaciones').findOne({ _id: new ObjectId(id) });
     if (!pub) return res.status(404).json({ error: 'Publicación no encontrada' });
+
     let likesUsuarios = Array.isArray(pub.likesUsuarios) ? pub.likesUsuarios : [];
     let liked = likesUsuarios.includes(usuario);
-    if (liked) {
-      likesUsuarios = likesUsuarios.filter(u => u !== usuario);
-    } else {
-      likesUsuarios.push(usuario);
-    }
+
+    if (liked) likesUsuarios = likesUsuarios.filter(u => u !== usuario);
+    else likesUsuarios.push(usuario);
+
     const likes = likesUsuarios.length;
+
     await db.collection('publicaciones').updateOne(
       { _id: new ObjectId(id) },
       { $set: { likesUsuarios, likes } }
     );
+
     res.json({ likes, liked: !liked });
   } catch (err) {
     res.status(500).json({ error: 'Error al dar/quitar like' });
   }
 });
+
+// Obtener publicaciones
 app.get('/api/publicaciones', async (req, res) => {
   try {
     const publicaciones = await db.collection('publicaciones').find({}).toArray();
     res.json(publicaciones);
   } catch (err) {
-    console.error("Error en /api/publicaciones:", err);
     res.status(500).json({ error: "Error al obtener publicaciones" });
   }
 });
 
-// Crear publicación
-// Editar publicación
-// Eliminar publicación
-// Agregar comentario a una publicación
-// Editar comentario en una publicación
+// Editar comentario
 app.put('/api/publicaciones/:id/comentarios/:cid', async (req, res) => {
   try {
     const { id, cid } = req.params;
     const { texto } = req.body;
-    if (!texto || !texto.trim()) {
-      return res.status(400).json({ error: 'El comentario no puede estar vacío.' });
-    }
-    // Buscar la publicación y actualizar el comentario por índice
+
+    if (!texto?.trim()) return res.status(400).json({ error: 'El comentario no puede estar vacío.' });
+
     const publicacion = await db.collection('publicaciones').findOne({ _id: new ObjectId(id) });
-    if (!publicacion) {
-      return res.status(404).json({ error: 'Publicación no encontrada.' });
-    }
+    if (!publicacion) return res.status(404).json({ error: 'Publicación no encontrada.' });
+
     const comentarios = publicacion.comentarios || [];
-    if (!comentarios[cid]) {
-      return res.status(404).json({ error: 'Comentario no encontrado.' });
-    }
+    if (!comentarios[cid]) return res.status(404).json({ error: 'Comentario no encontrado.' });
+
     comentarios[cid].texto = texto;
+
     await db.collection('publicaciones').updateOne(
       { _id: new ObjectId(id) },
       { $set: { comentarios } }
     );
+
     res.json({ mensaje: 'Comentario editado correctamente.' });
   } catch (err) {
-    console.error('Error en /api/publicaciones/:id/comentarios/:cid (PUT):', err);
     res.status(500).json({ error: 'Error al editar comentario.' });
   }
 });
 
-// Eliminar comentario en una publicación
+// Eliminar comentario
 app.delete('/api/publicaciones/:id/comentarios/:cid', async (req, res) => {
   try {
     const { id, cid } = req.params;
-    // Buscar la publicación y eliminar el comentario por índice
+
     const publicacion = await db.collection('publicaciones').findOne({ _id: new ObjectId(id) });
-    if (!publicacion) {
-      return res.status(404).json({ error: 'Publicación no encontrada.' });
-    }
+    if (!publicacion) return res.status(404).json({ error: 'Publicación no encontrada.' });
+
     const comentarios = publicacion.comentarios || [];
-    if (!comentarios[cid]) {
-      return res.status(404).json({ error: 'Comentario no encontrado.' });
-    }
+    if (!comentarios[cid]) return res.status(404).json({ error: 'Comentario no encontrado.' });
+
     comentarios.splice(cid, 1);
+
     await db.collection('publicaciones').updateOne(
       { _id: new ObjectId(id) },
       { $set: { comentarios } }
     );
+
     res.json({ mensaje: 'Comentario eliminado correctamente.' });
   } catch (err) {
-    console.error('Error en /api/publicaciones/:id/comentarios/:cid (DELETE):', err);
     res.status(500).json({ error: 'Error al eliminar comentario.' });
   }
 });
+
+// Agregar comentario
 app.post('/api/publicaciones/:id/comentarios', async (req, res) => {
   try {
     const { id } = req.params;
     const { usuario, texto } = req.body;
-    if (!texto || !texto.trim()) {
-      return res.status(400).json({ error: 'El comentario no puede estar vacío.' });
-    }
-    const comentario = { usuario, texto };
+
+    if (!texto?.trim()) return res.status(400).json({ error: 'El comentario no puede estar vacío.' });
+
     const resultado = await db.collection('publicaciones').updateOne(
       { _id: new ObjectId(id) },
-      { $push: { comentarios: comentario } }
+      { $push: { comentarios: { usuario, texto } } }
     );
-    if (resultado.matchedCount === 0) {
-      return res.status(404).json({ error: 'Publicación no encontrada.' });
-    }
+
+    if (!resultado.matchedCount) return res.status(404).json({ error: 'Publicación no encontrada.' });
+
     res.json({ mensaje: 'Comentario agregado correctamente.' });
   } catch (err) {
-    console.error('Error en /api/publicaciones/:id/comentarios (POST):', err);
     res.status(500).json({ error: 'Error al agregar comentario.' });
   }
 });
+
+// Eliminar publicación
 app.delete('/api/publicaciones/:id', async (req, res) => {
   try {
     const { id } = req.params;
+
     const resultado = await db.collection('publicaciones').deleteOne({ _id: new ObjectId(id) });
-    if (resultado.deletedCount === 0) {
-      return res.status(404).json({ error: 'Publicación no encontrada.' });
-    }
+    if (!resultado.deletedCount) return res.status(404).json({ error: 'Publicación no encontrada.' });
+
     res.json({ mensaje: 'Publicación eliminada correctamente.' });
   } catch (err) {
-    console.error('Error en /api/publicaciones/:id (DELETE):', err);
     res.status(500).json({ error: 'Error al eliminar publicación.' });
   }
 });
+
+// Editar publicación
 app.put('/api/publicaciones/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { contenido } = req.body;
-    if (!contenido || !contenido.trim()) {
-      return res.status(400).json({ error: 'El contenido es obligatorio.' });
-    }
+
+    if (!contenido?.trim()) return res.status(400).json({ error: 'El contenido es obligatorio.' });
+
     const resultado = await db.collection('publicaciones').updateOne(
       { _id: new ObjectId(id) },
       { $set: { contenido } }
     );
-    if (resultado.matchedCount === 0) {
-      return res.status(404).json({ error: 'Publicación no encontrada.' });
-    }
+
+    if (!resultado.matchedCount) return res.status(404).json({ error: 'Publicación no encontrada.' });
+
     res.json({ mensaje: 'Publicación actualizada correctamente.' });
   } catch (err) {
-    console.error('Error en /api/publicaciones/:id (PUT):', err);
     res.status(500).json({ error: 'Error al editar publicación.' });
   }
 });
+
+// Crear publicación
 app.post('/api/publicaciones', async (req, res) => {
   try {
     const { contenido } = req.body;
-    if (!contenido || !contenido.trim()) {
-      return res.status(400).json({ error: 'El contenido es obligatorio.' });
-    }
 
-    // Obtener token JWT del header Authorization
-    const authHeader = req.headers['authorization'];
+    if (!contenido?.trim()) return res.status(400).json({ error: 'El contenido es obligatorio.' });
+
     let usuario = 'Anonimo';
-    if (authHeader && authHeader.startsWith('Bearer ')) {
+
+    const authHeader = req.headers['authorization'];
+    if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
       try {
         const decoded = jwt.verify(token, 'secreto');
-        // Buscar usuario en la base de datos
         const userDb = await db.collection('usuarios').findOne({ email: decoded.email });
-        if (userDb) {
-          usuario = userDb.nombre;
-        }
-      } catch (err) {}
+        if (userDb) usuario = userDb.nombre;
+      } catch {}
     }
 
     const nuevaPublicacion = {
@@ -231,21 +226,24 @@ app.post('/api/publicaciones', async (req, res) => {
       likes: 0,
       comentarios: []
     };
+
     const resultado = await db.collection('publicaciones').insertOne(nuevaPublicacion);
     res.status(201).json({ ...nuevaPublicacion, _id: resultado.insertedId });
   } catch (err) {
-    console.error('Error en /api/publicaciones (POST):', err);
     res.status(500).json({ error: 'Error al crear publicación.' });
   }
 });
 
+
+// =========================
+//      OTROS GET
+// =========================
 
 app.get('/api/friends', async (req, res) => {
   try {
     const friends = await db.collection('amigos').find({}).toArray();
     res.json(friends);
   } catch (err) {
-    console.error("Error en /api/friends:", err);
     res.status(500).json({ error: "Error al obtener amigos" });
   }
 });
@@ -255,7 +253,6 @@ app.get('/api/messages', async (req, res) => {
     const messages = await db.collection('mensajes').find({}).toArray();
     res.json(messages);
   } catch (err) {
-    console.error("Error en /api/messages:", err);
     res.status(500).json({ error: "Error al obtener mensajes" });
   }
 });
@@ -265,107 +262,124 @@ app.get('/api/notifications', async (req, res) => {
     const notifications = await db.collection('notificaciones').find({}).toArray();
     res.json(notifications);
   } catch (err) {
-    console.error("Error en /api/notifications:", err);
     res.status(500).json({ error: "Error al obtener notificaciones" });
   }
 });
 
+
+// =========================
+//      PERFIL (CORREGIDO)
+// =========================
+
+// 👉 GET perfiles
 app.get('/api/profile', async (req, res) => {
-  // Editar perfil de usuario (permite cambiar nombre de usuario)
-  app.put('/api/profile/:usuario', async (req, res) => {
-    try {
-      const usuarioActual = req.params.usuario;
-      const { usuario: nuevoUsuario, bio, intereses } = req.body;
-      if (!usuarioActual || !nuevoUsuario) return res.status(400).json({ error: 'Usuario requerido' });
-      // Verificar si el nuevo nombre ya existe (y no es el mismo documento)
-      if (usuarioActual !== nuevoUsuario) {
-        const existe = await db.collection('perfiles').findOne({ usuario: nuevoUsuario });
-        if (existe) return res.status(409).json({ error: 'El nombre de usuario ya está en uso' });
-      }
-      const result = await db.collection('perfiles').updateOne(
-        { usuario: usuarioActual },
-        { $set: { usuario: nuevoUsuario, bio, intereses } }
-      );
-      if (result.matchedCount === 0) {
-        return res.status(404).json({ error: 'Perfil no encontrado' });
-      }
-      res.json({ mensaje: 'Perfil actualizado correctamente' });
-    } catch (err) {
-      console.error('Error en /api/profile/:usuario (PUT):', err);
-      res.status(500).json({ error: 'Error al actualizar perfil' });
-    }
-  });
   try {
     const profiles = await db.collection('perfiles').find({}).toArray();
     res.json(profiles);
   } catch (err) {
-    console.error("Error en /api/profile:", err);
     res.status(500).json({ error: "Error al obtener perfil" });
   }
 });
 
+// 👉 PUT actualizar perfil (FUERA DEL GET)
+app.put('/api/profile/:usuario', async (req, res) => {
+  try {
+    const usuarioActual = req.params.usuario;
+    const { usuario: nuevoUsuario, bio, intereses } = req.body;
 
-// Endpoint de registro
+    if (!usuarioActual || !nuevoUsuario) return res.status(400).json({ error: 'Usuario requerido' });
+
+    // Verificar si el nuevo nombre ya existe
+    if (usuarioActual !== nuevoUsuario) {
+      const existe = await db.collection('usuarios').findOne({ nombre: nuevoUsuario });
+      if (existe) return res.status(409).json({ error: 'El nombre de usuario ya está en uso' });
+    }
+
+    const result = await db.collection('usuarios').updateOne(
+      { nombre: usuarioActual },
+      { $set: { nombre: nuevoUsuario, bio, intereses } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({ mensaje: 'Perfil actualizado correctamente' });
+  } catch (err) {
+    console.error('Error al actualizar perfil:', err);
+    res.status(500).json({ error: 'Error al actualizar perfil' });
+  }
+});
+
+
+
+// =========================
+//   REGISTRO Y LOGIN
+// =========================
+
 app.post('/api/register', async (req, res) => {
   try {
     const { nombre, email, password } = req.body;
-    if (!nombre || !email || !password) {
+
+    if (!nombre || !email || !password)
       return res.status(400).json({ error: 'Faltan campos obligatorios.' });
-    }
-    // Verificar si el email ya existe
+
     const existe = await db.collection('usuarios').findOne({ email });
-    if (existe) {
-      return res.status(409).json({ error: 'El email ya está registrado.' });
-    }
-    // Encriptar contraseña
+    if (existe) return res.status(409).json({ error: 'El email ya está registrado.' });
+
     const hash = await bcrypt.hash(password, 10);
-    const nuevoUsuario = {
+
+    await db.collection('usuarios').insertOne({
       nombre,
       email,
       password: hash,
       fechaRegistro: new Date()
-    };
-    await db.collection('usuarios').insertOne(nuevoUsuario);
-    // Crear perfil básico asociado
+    });
+
     await db.collection('perfiles').insertOne({
       usuario: nombre,
       email,
       bio: '',
       intereses: []
     });
+
     res.status(201).json({ mensaje: 'Usuario registrado correctamente.' });
   } catch (err) {
-    console.error('Error en /api/register:', err);
-    res.status(500).json({ error: 'Error al registrar usuario.', detalle: err.message });
+    res.status(500).json({ error: 'Error al registrar usuario.' });
   }
 });
 
-// Endpoint de login
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) {
+
+    if (!email || !password)
       return res.status(400).json({ error: 'Faltan campos obligatorios.' });
-    }
+
     const usuario = await db.collection('usuarios').findOne({ email });
-    if (!usuario) {
-      return res.status(401).json({ error: 'Credenciales incorrectas.' });
-    }
+    if (!usuario) return res.status(401).json({ error: 'Credenciales incorrectas.' });
+
     const valido = await bcrypt.compare(password, usuario.password);
-    if (!valido) {
-      return res.status(401).json({ error: 'Credenciales incorrectas.' });
-    }
-    // Generar token JWT
-    const token = jwt.sign({ id: usuario._id, email: usuario.email }, 'secreto', { expiresIn: '2h' });
+    if (!valido) return res.status(401).json({ error: 'Credenciales incorrectas.' });
+
+    const token = jwt.sign(
+      { id: usuario._id, email: usuario.email },
+      'secreto',
+      { expiresIn: '2h' }
+    );
+
     res.json({ token, usuario: { nombre: usuario.nombre, email: usuario.email } });
   } catch (err) {
-    console.error('Error en /api/login:', err);
     res.status(500).json({ error: 'Error al iniciar sesión.' });
   }
 });
 
+
+// =========================
+//    INICIAR SERVIDOR
+// =========================
+
 connectDB().then(() => {
-  // Obtener todos los usuarios registrados
   app.get('/api/usuarios', async (req, res) => {
     try {
       const usuarios = await db.collection('usuarios').find({}, { projection: { password: 0 } }).toArray();
@@ -374,6 +388,7 @@ connectDB().then(() => {
       res.status(500).json({ error: 'Error al obtener usuarios' });
     }
   });
+
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor escuchando en http://0.0.0.0:${PORT}`);
   });
