@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { FaBars } from "react-icons/fa"; // icono de hamburguesa
 import Feed from "./components/Feed";
 import Profile from "./components/Profile";
@@ -40,6 +40,8 @@ export default function App() {
     return () => clearInterval(interval);
   }, [token]);
 
+  const location = useLocation();
+  const isProfileRoute = location.pathname.startsWith('/profile');
   return (
     <div className="app flex flex-col min-h-screen bg-gray-100">
       <Navbar />
@@ -58,7 +60,7 @@ export default function App() {
               <Route path="/register" element={<Register />} />
             </Routes>
           </main>
-          <UsuariosOnline />
+          {!isProfileRoute && <UsuariosOnline />}
         </div>
       ) : (
         <main className="main flex-1 p-6">

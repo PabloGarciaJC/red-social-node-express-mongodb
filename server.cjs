@@ -271,6 +271,25 @@ app.get('/api/notifications', async (req, res) => {
 });
 
 app.get('/api/profile', async (req, res) => {
+  // Editar perfil de usuario
+  app.put('/api/profile/:usuario', async (req, res) => {
+    try {
+      const { usuario } = req.params;
+      const { bio, intereses } = req.body;
+      if (!usuario) return res.status(400).json({ error: 'Usuario requerido' });
+      const result = await db.collection('perfiles').updateOne(
+        { usuario },
+        { $set: { bio, intereses } }
+      );
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ error: 'Perfil no encontrado' });
+      }
+      res.json({ mensaje: 'Perfil actualizado correctamente' });
+    } catch (err) {
+      console.error('Error en /api/profile/:usuario (PUT):', err);
+      res.status(500).json({ error: 'Error al actualizar perfil' });
+    }
+  });
   try {
     const profiles = await db.collection('perfiles').find({}).toArray();
     res.json(profiles);

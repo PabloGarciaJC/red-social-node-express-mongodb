@@ -26,6 +26,41 @@ const Profile = () => {
       .catch(() => setLoading(false));
   }, [usuario]);
 
+  const [editMode, setEditMode] = useState(false);
+  const [bio, setBio] = useState("");
+  const [intereses, setIntereses] = useState("");
+  const [msg, setMsg] = useState("");
+  const usuarioLog = localStorage.getItem('nombre') || localStorage.getItem('usuario');
+
+  useEffect(() => {
+    if (profile) {
+      setBio(profile.bio || "");
+      setIntereses(profile.intereses ? profile.intereses.join(', ') : "");
+    }
+  }, [profile]);
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setMsg("");
+    try {
+      const res = await fetch(`http://localhost:3000/api/profile/${encodeURIComponent(profile.usuario)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bio, intereses: intereses.split(',').map(i => i.trim()).filter(Boolean) })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMsg('Perfil actualizado correctamente');
+        setEditMode(false);
+        setProfile(p => ({ ...p, bio, intereses: intereses.split(',').map(i => i.trim()).filter(Boolean) }));
+      } else {
+        setMsg(data.error || 'Error al actualizar');
+      }
+    } catch {
+      setMsg('Error de red');
+    }
+  };
+
   return (
     <div className="profile">
       <h2 className="profile__title">Perfil</h2>
@@ -33,15 +68,41 @@ const Profile = () => {
         <div>Cargando perfil...</div>
       ) : profile ? (
         <div className="profile__card">
-          {/* El avatar debe venir de la colección de usuarios, no del perfil */}
           <div className="profile__info">
             <div className="profile__name">{profile.usuario}</div>
-            <div className="profile__bio">{profile.bio}</div>
-            <div className="profile__stats">
-              {profile.intereses && (
-                <span>Intereses: <span>{profile.intereses.join(', ')}</span></span>
-              )}
-            </div>
+            {editMode ? (
+              <form className="profile__form profile__form--edit" onSubmit={handleSave}>
+                <div className="profile__form-group">
+                  <label className="profile__label">Bio:</label>
+                  <textarea className="profile__textarea" value={bio} onChange={e => setBio(e.target.value)} rows={2} />
+                </div>
+                <div className="profile__form-group">
+                  <label className="profile__label">Intereses (separados por coma):</label>
+                  <input className="profile__input" type="text" value={intereses} onChange={e => setIntereses(e.target.value)} />
+                </div>
+                <div className="profile__form-actions">
+                  <button className="profile__btn profile__btn--save" type="submit">Guardar</button>
+                  <button className="profile__btn profile__btn--cancel" type="button" onClick={() => setEditMode(false)}>Cancelar</button>
+                </div>
+                {msg && <div className="profile__msg">{msg}</div>}
+              </form>
+            ) : (
+              <>
+                <div className="profile__bio">{profile.bio}</div>
+                <div className="profile__stats">
+                  {profile.intereses && (
+                    <span>Intereses: <span>{profile.intereses.join(', ')}</span></span>
+                  )}
+                </div>
+                {usuarioLog && (() => {
+                  const norm = s => s && s.trim().toLowerCase().replace(/\s+/g, '');
+                  return norm(profile.usuario) === norm(usuarioLog);
+                })() && (
+                  <button className="profile__btn profile__btn--edit" onClick={() => setEditMode(true)}>Editar perfil</button>
+                )}
+                {msg && <div className="profile__msg">{msg}</div>}
+              </>
+            )}
           </div>
         </div>
       ) : (

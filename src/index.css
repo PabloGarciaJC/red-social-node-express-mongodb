@@ -1,4 +1,28 @@
-/* Estilos para el modal de edición de publicaciones */
+/* ====== INPUTS UNIFICADOS (CORREGIDOS) ====== */
+.profile__input,
+.profile__textarea {
+   width: -webkit-fill-available;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #e3e6ea;
+  font-size: 1rem;
+  background: #fff;
+  transition: border 0.2s;
+  margin-bottom: 10px;
+}
+
+.profile__input:focus,
+.profile__textarea:focus {
+  border: 1.5px solid #1877f2;
+  outline: none;
+}
+
+.profile__textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* ====== MODAL FEED ====== */
 .feed__modal-overlay {
   position: fixed;
   top: 0;
@@ -31,7 +55,8 @@
   margin-top: 0;
   margin-bottom: 1rem;
 }
-/* Mensaje de éxito en el feed */
+
+/* SUCCESS FEED */
 .feed__success {
   margin-top: 10px;
   padding: 8px 16px;
@@ -63,6 +88,8 @@
 .feed__success-close:hover {
   color: #ff4d4f;
 }
+
+/* ====== BASE ====== */
 body {
   background-color: #f0f2f5;
   font-family: 'Inter', Arial, Helvetica, sans-serif;
@@ -74,7 +101,6 @@ body {
 html {
   scroll-behavior: smooth;
 }
-
 
 /* ====== LOGIN & REGISTER ====== */
 .login,
@@ -118,7 +144,7 @@ html {
   border-radius: 8px;
   border: 1px solid #e3e6ea;
   font-size: 1rem;
-  background: #f7faff;
+  background: #fff;
   transition: border 0.2s;
 }
 
@@ -252,7 +278,7 @@ html {
   color: #1877f2;
 }
 
-/* ====== FEED ====== */
+/* ====== FEED POSTS ====== */
 .feed {}
 
 .feed__title {
@@ -422,7 +448,7 @@ html {
   border-radius: 10px;
   border: 1.5px solid #e3e6ea;
   font-size: 1.08rem;
-  background: #f7faff;
+  background: #fff;
   resize: vertical;
   margin-bottom: 8px;
   transition: border 0.2s;
@@ -461,10 +487,77 @@ html {
 }
 
 /* ====== PROFILE ====== */
-.profile {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 24px;
+.profile__edit-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  background: #f7faff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(24, 119, 242, 0.07);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border: 1px solid #e3e6ea;
+}
+
+.profile__edit-form label {
+  font-weight: 600;
+  color: #1877f2;
+  margin-bottom: 6px;
+}
+
+.profile__edit-form input,
+.profile__edit-form textarea {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #e3e6ea;
+  font-size: 1rem;
+  background: #fff;
+  transition: border 0.2s;
+}
+
+.profile__edit-form input:focus,
+.profile__edit-form textarea:focus {
+  border: 1.5px solid #1877f2;
+  outline: none;
+}
+
+.profile__edit-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.profile__info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile__btn {
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #1877f2 80%, #1456b8 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(24, 119, 242, 0.10);
+  margin-top: 10px;
+}
+
+.profile__btn:disabled {
+  background: #b3cdfa;
+  cursor: not-allowed;
+}
+
+.profile__btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #1456b8 80%, #1877f2 100%);
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.15);
 }
 
 .profile__card {
@@ -733,10 +826,9 @@ html {
   justify-content: center;
   font-weight: bold;
   font-size: 1em;
-  margin-right: 6px;
-  border: 1px solid #eee;
   text-transform: uppercase;
   letter-spacing: 1px;
+  border: 1px solid #eee;
 }
 
 .usuarios-online__status {
@@ -786,10 +878,6 @@ html {
   min-width: 0;
 }
 
-.usuarios-online {
-  align-self: flex-start;
-}
-
 .feed__comment-action-btn {
   padding: 6px 6px;
   border-radius: 8px;
@@ -810,8 +898,6 @@ html {
   color: #1877f2;
 }
 
-
-
 .feed__comment-action-btn.feed__action-icon--delete:hover {
   color: #b71c1c;
 }
@@ -826,8 +912,6 @@ html {
   align-items: center;
 }
 
-
-
 .feed__action-icon--delete:hover {
   color: #b71c1c;
 }
@@ -836,15 +920,9 @@ html {
   color: #1877f2;
   background: none;
   border: none;
-  cursor: pointer;
   margin-left: 6px;
-  color: #555;
   padding: 2px 4px;
   font-size: 0.95em;
   vertical-align: middle;
   transition: color 0.2s;
 }
-.feed__comment-action-btn:hover {
-  color: #007bff;
-}
-
