@@ -107,27 +107,18 @@ const Profile = () => {
                   const norm = s => s && s.trim().toLowerCase().replace(/\s+/g, '');
                   return norm(profile.usuario) === norm(usuarioLog);
                 })() && (
-                  <button className="profile__btn profile__btn--edit" onClick={() => setEditMode(true)}>Editar perfil</button>
-                )}
+                    <button className="profile__btn profile__btn--edit" onClick={() => setEditMode(true)}>Editar perfil</button>
+                  )}
               </>
             )}
-                {/* Mensaje de éxito/error solo fuera del form */}
-                {!editMode && msg && (
-                  <div className={
-                    msg.toLowerCase().includes('correctamente')
-                      ? 'profile__msg profile__msg--success'
-                      : 'profile__msg profile__msg--error'
-                  }>
-                    {msg}
-                    <button
-                      className="profile__msg-close"
-                      type="button"
-                      title="Cerrar"
-                      onClick={() => setMsg("")}
-                      style={{marginLeft:8,background:'none',border:'none',fontSize:'1.2em',cursor:'pointer'}}
-                    >×</button>
-                  </div>
-                )}
+            {/* Mensaje de éxito/error solo fuera del form */}
+            {!editMode && msg && (
+              <div className={
+                msg.toLowerCase().includes('correctamente') ? 'profile__msg profile__msg--success' : 'profile__msg profile__msg--error'}>
+                {msg}
+                <button className="profile__msg-close" type="button" title="Cerrar" onClick={() => setMsg("")}>×</button>
+              </div>
+            )}
           </div>
         </div>
       ) : (
